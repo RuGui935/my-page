@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
@@ -12,924 +12,1050 @@
         }
 
         body {
-            font-family: -apple-system, "PingFang SC", "Microsoft YaHei", "Helvetica Neue", sans-serif;
-            background: #ece4dc;
+            font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: #eae3db;
+            padding: 20px 14px 50px;
             color: #2c241e;
             min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        /* ===== 整体容器 ===== */
-        .app {
-            display: flex;
-            max-width: 880px;
+        .container {
+            max-width: 600px;
+            width: 100%;
             margin: 0 auto;
-            min-height: 100vh;
-            background: #faf8f5;
-            box-shadow: 0 0 40px rgba(140, 110, 80, 0.06);
+            background: #fcf9f6;
+            border-radius: 44px 44px 28px 28px;
+            padding: 32px 24px 40px;
+            box-shadow: 0 12px 48px rgba(120, 90, 70, 0.08);
+            position: relative;
+            overflow: hidden;
         }
 
-        /* ===== 左侧边栏 ===== */
-        .sidebar {
-            width: 180px;
-            flex-shrink: 0;
-            padding: 32px 16px 30px 24px;
-            background: #f6f1eb;
-            border-right: 1px solid #e8dfd6;
-            position: sticky;
+        .container::before {
+            content: "";
+            position: absolute;
             top: 0;
-            height: 100vh;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .sidebar .brand {
-            font-size: 18px;
-            font-weight: 500;
-            color: #3d2e24;
-            letter-spacing: 2px;
-            margin-bottom: 2px;
-        }
-
-        .sidebar .brand-sub {
-            font-size: 11px;
-            color: #b09684;
-            letter-spacing: 1px;
-            margin-bottom: 28px;
-        }
-
-        .sidebar .toc-list {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-        }
-
-        .sidebar .toc-list a {
-            display: block;
-            color: #7a6a5a;
-            text-decoration: none;
-            font-size: 12.5px;
-            padding: 5px 10px;
-            border-radius: 6px;
-            transition: 0.2s;
-            font-weight: 400;
-            letter-spacing: 0.3px;
-        }
-
-        .sidebar .toc-list a:hover {
-            background: #e8dfd6;
-            color: #3d2e24;
-        }
-
-        .sidebar .toc-list .num {
-            color: #c9b8a8;
-            font-size: 10px;
-            margin-right: 4px;
-            font-weight: 300;
-        }
-
-        .sidebar .footer-mini {
-            margin-top: auto;
-            font-size: 10px;
-            color: #c9b8a8;
-            letter-spacing: 1px;
-            padding-top: 18px;
-            border-top: 1px solid #e8dfd6;
-        }
-
-        /* ===== 右侧主内容 ===== */
-        .main {
-            flex: 1;
-            padding: 36px 40px 52px;
-            min-width: 0;
-            overflow-x: hidden;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #dcc4b4, #c9ae98, #dfc9b8);
+            border-radius: 44px 44px 0 0;
         }
 
         /* ===== 头部 ===== */
-        .header-mini {
-            margin-bottom: 32px;
-            padding-bottom: 16px;
-            border-bottom: 1px solid #ece4dc;
+        .header {
+            text-align: center;
+            padding: 6px 0 18px;
         }
 
-        .header-mini .greeting {
-            font-size: 13px;
-            color: #b09684;
-            letter-spacing: 1px;
-            font-weight: 300;
-        }
-
-        .header-mini h1 {
-            font-size: 24px;
-            font-weight: 500;
-            color: #3d2e24;
-            letter-spacing: 1px;
-            margin-top: 2px;
-        }
-
-        .header-mini .sub {
-            font-size: 13px;
-            color: #b09684;
-            margin-top: 2px;
-            font-weight: 300;
-            font-style: italic;
-        }
-
-        .header-mini .tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px 14px;
-            margin-top: 8px;
-        }
-
-        .header-mini .tags span {
-            font-size: 11.5px;
-            color: #6a5a4a;
-            padding: 2px 0;
-            border-bottom: 2px solid #dccfc2;
-        }
-
-        /* ===== 内容区块 ===== */
-        .block {
-            margin-top: 28px;
-        }
-
-        .block:first-of-type {
-            margin-top: 0;
-        }
-
-        .block-label {
-            font-size: 10px;
-            font-weight: 400;
-            color: #c9b8a8;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            margin-bottom: 6px;
-        }
-
-        .block p,
-        .block li {
-            font-size: 14px;
-            color: #3d322a;
-            line-height: 1.9;
-            margin-bottom: 3px;
-        }
-
-        .block strong {
-            font-weight: 500;
-            color: #3d2e24;
-        }
-
-        /* ===== 列表 ===== */
-        .block ul {
-            list-style: none;
-            padding-left: 0;
-        }
-
-        .block ul li {
-            padding-left: 16px;
-            position: relative;
-            margin-bottom: 2px;
-        }
-
-        .block ul li::before {
-            content: "";
-            position: absolute;
-            left: 0;
-            top: 10px;
-            width: 6px;
-            height: 1.5px;
-            background: #d0bcaa;
-        }
-
-        .block ul ul {
-            padding-left: 20px;
-        }
-
-        .block ul ul li::before {
-            width: 4px;
-            height: 1px;
-            background: #ddd2c6;
-            top: 10px;
-        }
-
-        /* ===== 分割 ===== */
-        .divider {
-            height: 1px;
-            background: #ece4dc;
-            margin: 16px 0 14px;
-        }
-
-        /* ============================================================ */
-        /* 新 · 爱好：圆点阵列 */
-        /* ============================================================ */
-        .hobby-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px 20px;
-            margin: 6px 0 8px;
-            padding: 4px 0;
-        }
-
-        .hobby-dot {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 13px;
-            color: #3d322a;
-        }
-
-        .hobby-dot .dot {
+        .header-avatar {
             display: inline-block;
-            width: 7px;
-            height: 7px;
+            font-size: 40px;
+            background: #f3ede7;
+            width: 72px;
+            height: 72px;
             border-radius: 50%;
-            background: #dbb594;
-            flex-shrink: 0;
+            line-height: 72px;
+            text-align: center;
+            margin-bottom: 4px;
+            box-shadow: 0 4px 14px rgba(160, 130, 110, 0.08);
         }
 
-        .hobby-dot .dot.dim {
-            background: #e0d4c8;
+        .header h1 {
+            font-size: 22px;
+            font-weight: 600;
+            color: #3d2e24;
+            letter-spacing: 3px;
         }
 
-        /* ============================================================ */
-        /* 新 · 游戏状态条 */
-        /* ============================================================ */
-        .game-bar-group {
+        .header .sub {
+            font-size: 13px;
+            color: #b8a292;
+            margin-top: 2px;
+            font-weight: 400;
+            letter-spacing: 1px;
+        }
+
+        .header-tags {
             display: flex;
-            flex-direction: column;
-            gap: 6px;
-            margin: 4px 0 8px;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 6px 12px;
+            margin-top: 12px;
         }
 
-        .game-bar {
+        .header-tags span {
+            font-size: 12px;
+            color: #7a6a5a;
+            background: #f3ede7;
+            padding: 3px 16px;
+            border-radius: 30px;
+            font-weight: 450;
+        }
+
+        /* ===== 目录 ===== */
+        .toc {
             display: flex;
-            align-items: center;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 4px 6px;
+            padding: 12px 0 16px;
+            margin-bottom: 4px;
+            border-bottom: 2px solid #f0e8e0;
+        }
+
+        .toc a {
+            color: #8a7a6a;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 450;
+            padding: 2px 12px;
+            border-radius: 30px;
+            transition: 0.2s;
+        }
+
+        .toc a:hover {
+            background: #e8ddd2;
+            color: #3d2e24;
+        }
+
+        .toc .toc-label {
+            color: #b8a292;
+            font-size: 11px;
+            font-weight: 400;
+            letter-spacing: 1px;
+            margin-right: 2px;
+        }
+
+        /* ===== 章节通用 ===== */
+        .section {
+            margin-top: 32px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+            margin-bottom: 14px;
+            padding-bottom: 6px;
+            border-bottom: 2px solid #f0e8e0;
+        }
+
+        .section-header .num {
+            font-size: 12px;
+            font-weight: 500;
+            color: #dcc4b4;
+            letter-spacing: 1px;
+            background: #f5efe8;
+            padding: 0 12px;
+            border-radius: 30px;
+            line-height: 24px;
+        }
+
+        .section-header h2 {
+            font-size: 17px;
+            font-weight: 600;
+            color: #3d2e24;
+            letter-spacing: 1.5px;
+        }
+
+        /* ================================================================
+                   01 昵称 — 名片式
+                   ================================================================ */
+        .name-cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
             gap: 10px;
         }
 
-        .game-bar .name {
-            font-size: 13px;
-            color: #3d322a;
-            width: 120px;
-            flex-shrink: 0;
+        .name-card {
+            background: #f6f0ea;
+            border-radius: 16px;
+            padding: 14px 12px 12px;
+            text-align: center;
+            border: 1px solid #eee4da;
+            transition: 0.2s;
         }
 
-        .game-bar .track {
-            flex: 1;
-            height: 4px;
-            border-radius: 4px;
-            background: #ece4dc;
-            position: relative;
-            max-width: 160px;
+        .name-card .name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #3d2e24;
+            display: block;
         }
 
-        .game-bar .track .fill {
-            height: 100%;
-            border-radius: 4px;
-            background: #dbb594;
-            transition: 0.3s;
-        }
-
-        .game-bar .track .fill.dim {
-            background: #d0bcaa;
-            width: 40% !important;
-        }
-
-        .game-bar .status {
+        .name-card .desc {
             font-size: 11px;
             color: #b09684;
-            font-weight: 300;
-            letter-spacing: 0.3px;
+            margin-top: 4px;
+            line-height: 1.4;
         }
 
-        /* ============================================================ */
-        /* 新 · 毛玻璃浮层卡片 */
-        /* ============================================================ */
-        .glass-card {
-            background: rgba(255, 252, 248, 0.6);
-            backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
-            border-radius: 16px;
-            padding: 14px 18px;
-            margin: 8px 0 10px;
-            border: 1px solid rgba(235, 225, 215, 0.5);
-            box-shadow: 0 4px 20px rgba(180, 150, 120, 0.06);
-        }
-
-        .glass-card p {
-            font-size: 13.5px;
-            color: #3d322a;
-            line-height: 1.85;
-        }
-
-        .glass-card strong {
-            font-weight: 500;
-            color: #3d2e24;
-        }
-
-        /* ============================================================ */
-        /* 新 · 下划线标签（替代 badge） */
-        /* ============================================================ */
-        .underline-tag {
+        .name-card .tag {
             display: inline-block;
-            font-size: 12.5px;
-            color: #4a3a2e;
-            padding: 2px 0;
-            margin: 2px 12px 2px 0;
-            border-bottom: 2px solid #e0d4c8;
-            letter-spacing: 0.3px;
+            font-size: 10px;
+            color: #b8a292;
+            background: #f3ede7;
+            padding: 1px 12px;
+            border-radius: 30px;
+            margin-top: 6px;
         }
 
-        .underline-tag.muted {
-            color: #a09080;
-            border-bottom-color: #ece4dc;
+        .name-note {
+            font-size: 12px;
+            color: #b8a292;
+            margin-top: 10px;
+            font-style: italic;
+            text-align: center;
         }
 
-        .tag-group {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 2px 0;
-            margin: 4px 0 6px;
+        /* ================================================================
+                   02 基本信息 — 属性标签墙
+                   ================================================================ */
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
         }
 
-        /* ============================================================ */
-        /* 新 · 角色：圆角方块排列 */
-        /* ============================================================ */
-        .char-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px 10px;
-            margin: 4px 0 6px;
-        }
-
-        .char-block {
+        .info-tag {
+            background: #f6f0ea;
+            border-radius: 40px;
+            padding: 8px 16px;
+            text-align: center;
             font-size: 13px;
             color: #3d322a;
-            padding: 2px 14px 2px 0;
-            border-right: 1px solid #ece4dc;
-            padding-right: 12px;
+            border: 1px solid #eee4da;
         }
 
-        .char-block:last-child {
-            border-right: none;
+        .info-tag .icon {
+            margin-right: 4px;
         }
 
-        /* ============================================================ */
-        /* 新 · 二栏网格（内容区用） */
-        /* ============================================================ */
-        .grid-2 {
+        .info-tag.highlight {
+            background: #f0e8e0;
+            border-color: #dcc4b4;
+            font-weight: 500;
+        }
+
+        .info-list {
+            margin-top: 12px;
+            padding-left: 0;
+            list-style: none;
+        }
+
+        .info-list li {
+            font-size: 13px;
+            color: #3d322a;
+            line-height: 1.8;
+            padding-left: 16px;
+            position: relative;
+        }
+
+        .info-list li::before {
+            content: "—";
+            position: absolute;
+            left: 0;
+            color: #dcc4b4;
+        }
+
+        /* ================================================================
+                   03 空间说明书 — 规则卡片
+                   ================================================================ */
+        .rule-cards {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 10px;
-            margin: 8px 0 10px;
         }
 
-        .grid-2 .item {
-            background: rgba(255, 252, 248, 0.5);
-            backdrop-filter: blur(2px);
-            -webkit-backdrop-filter: blur(2px);
-            border-radius: 14px;
+        .rule-card {
+            background: #f6f0ea;
+            border-radius: 16px;
             padding: 14px 16px;
-            border: 1px solid rgba(235, 225, 215, 0.4);
+            border: 1px solid #eee4da;
         }
 
-        .grid-2 .item .label {
-            font-size: 10px;
-            font-weight: 400;
-            color: #b09684;
-            letter-spacing: 1px;
-            text-transform: uppercase;
+        .rule-card .rule-icon {
+            font-size: 20px;
             display: block;
             margin-bottom: 2px;
         }
 
-        .grid-2 .item .text {
+        .rule-card .rule-title {
             font-size: 13px;
-            color: #3d322a;
-            line-height: 1.7;
+            font-weight: 600;
+            color: #3d2e24;
         }
 
-        .grid-2 .item .sub {
+        .rule-card .rule-desc {
             font-size: 12px;
-            color: #a09080;
+            color: #6a5a4a;
+            line-height: 1.6;
             margin-top: 2px;
         }
 
-        /* ============================================================ */
-        /* 新 · 展示条（展示作品用） */
-        /* ============================================================ */
-        .showcase-line {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 4px 20px;
-            padding: 8px 0 4px;
-            border-top: 1px solid #ece4dc;
-            margin-top: 8px;
+        .rule-card.full {
+            grid-column: 1 / -1;
         }
 
-        .showcase-line .label {
-            font-size: 10px;
-            font-weight: 400;
-            color: #b09684;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            display: block;
-            width: 100%;
-            margin-bottom: 2px;
+        /* ================================================================
+                   04 爱好与喜好倾向 — 图标网格 + 双栏
+                   ================================================================ */
+        .hobby-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 10px;
         }
 
-        .showcase-line span {
-            font-size: 13px;
-            color: #3d322a;
-        }
-
-        .showcase-line span::before {
-            content: "· ";
-            color: #d0bcaa;
-        }
-
-        /* ============================================================ */
-        /* 雷点块 */
-        /* ============================================================ */
-        .warning-block {
-            background: rgba(255, 252, 248, 0.5);
-            backdrop-filter: blur(2px);
-            -webkit-backdrop-filter: blur(2px);
+        .hobby-item {
+            background: #f6f0ea;
             border-radius: 14px;
-            padding: 14px 18px;
-            margin: 10px 0 6px;
-            border: 1px solid rgba(235, 225, 215, 0.4);
+            padding: 12px 6px;
+            text-align: center;
+            border: 1px solid #eee4da;
+            transition: 0.2s;
         }
 
-        .warning-block .title {
+        .hobby-item .h-icon {
+            font-size: 22px;
+            display: block;
+        }
+
+        .hobby-item .h-name {
             font-size: 12px;
-            font-weight: 500;
-            color: #3d2e24;
-            letter-spacing: 0.5px;
-            margin-bottom: 2px;
+            color: #3d322a;
+            margin-top: 2px;
         }
 
-        .warning-block p {
-            font-size: 13px;
-            color: #4a3a2e;
-            line-height: 1.85;
-        }
-
-        /* ===== 末尾 ===== */
-        .footer-note {
-            margin-top: 24px;
-            padding-top: 16px;
-            border-top: 1px solid #ece4dc;
+        .hobby-note {
             font-size: 13px;
             color: #8a7a6a;
+            text-align: center;
+            margin-bottom: 10px;
+            font-style: italic;
+        }
+
+        .game-stat {
+            background: #f6f0ea;
+            border-radius: 16px;
+            padding: 14px 18px;
+            text-align: center;
+            border: 1px solid #eee4da;
+            font-size: 13px;
+            color: #3d322a;
+            margin-bottom: 12px;
+        }
+
+        .game-stat strong {
+            color: #3d2e24;
+        }
+
+        .taste-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .taste-card {
+            background: #f6f0ea;
+            border-radius: 16px;
+            padding: 14px 16px;
+            border: 1px solid #eee4da;
+        }
+
+        .taste-card .t-label {
+            font-size: 11px;
+            font-weight: 500;
+            color: #b8a292;
+            letter-spacing: 1px;
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        .taste-card .t-content {
+            font-size: 13px;
+            color: #3d322a;
+            line-height: 1.6;
+        }
+
+        .taste-card .t-sub {
+            font-size: 12px;
+            color: #b8a292;
+            margin-top: 2px;
+        }
+
+        .showcase-block {
+            margin-top: 12px;
+            background: #f6f0ea;
+            border-radius: 16px;
+            padding: 12px 16px;
+            border: 1px solid #eee4da;
+            text-align: center;
+        }
+
+        .showcase-block .s-label {
+            font-size: 11px;
+            font-weight: 500;
+            color: #b8a292;
+            letter-spacing: 1px;
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        .showcase-block .s-item {
+            font-size: 13px;
+            color: #3d322a;
+            margin: 0 8px;
+        }
+
+        .showcase-block .s-item::before {
+            content: "· ";
+            color: #dcc4b4;
+        }
+
+        /* ================================================================
+                   05 具体属性 — 分类折叠卡
+                   ================================================================ */
+        .attr-group {
+            margin-bottom: 14px;
+        }
+
+        .attr-group .attr-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #3d2e24;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 4px;
+        }
+
+        .attr-group .attr-label .a-icon {
+            font-size: 18px;
+        }
+
+        .attr-group .attr-label .a-tag {
+            font-size: 10px;
+            font-weight: 400;
+            color: #b8a292;
+            background: #f3ede7;
+            padding: 0 12px;
+            border-radius: 30px;
+            line-height: 20px;
+        }
+
+        .attr-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px 10px;
+            padding-left: 4px;
+        }
+
+        .attr-content .chip {
+            font-size: 12px;
+            color: #5a4a3a;
+            background: #f3ede7;
+            padding: 2px 14px;
+            border-radius: 30px;
+        }
+
+        .attr-content .chip.outline {
+            background: transparent;
+            border: 1px solid #e0d4c8;
+            color: #8a7a6a;
+        }
+
+        .attr-content .chip-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2px 6px;
+        }
+
+        .attr-content .chip-sm {
+            font-size: 11px;
+            color: #5a4a3a;
+            background: #f3ede7;
+            padding: 1px 12px;
+            border-radius: 30px;
+        }
+
+        .attr-list {
+            padding-left: 4px;
+            list-style: none;
+            margin-top: 2px;
+        }
+
+        .attr-list li {
+            font-size: 13px;
+            color: #3d322a;
+            line-height: 1.8;
+            padding-left: 16px;
+            position: relative;
+        }
+
+        .attr-list li::before {
+            content: "·";
+            position: absolute;
+            left: 0;
+            color: #dcc4b4;
+        }
+
+        .attr-list li strong {
+            color: #3d2e24;
+        }
+
+        .attr-divider {
+            height: 1px;
+            background: #f0e8e0;
+            margin: 12px 0 14px;
+        }
+
+        .attr-note {
+            font-size: 12px;
+            color: #b8a292;
+            margin-top: 4px;
+            font-style: italic;
+        }
+
+        /* ================================================================
+                   06 雷点与备注 — 警示列表 + 引文块
+                   ================================================================ */
+        .warning-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .warning-chip {
+            background: #f8f0e8;
+            border-radius: 40px;
+            padding: 6px 16px;
+            text-align: center;
+            font-size: 12px;
+            color: #5a4a3a;
+            border: 1px solid #eee4da;
+        }
+
+        .warning-chip .w-icon {
+            margin-right: 4px;
+        }
+
+        .warning-divider {
+            height: 1px;
+            background: #f0e8e0;
+            margin: 10px 0 12px;
+        }
+
+        .quote-block {
+            background: #f8f2ec;
+            border-radius: 18px;
+            padding: 18px 20px;
+            margin: 10px 0 14px;
+            border-left: 4px solid #dcc4b4;
+        }
+
+        .quote-block .q-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #3d2e24;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .quote-block p {
+            font-size: 13px;
+            color: #4a3a2e;
+            line-height: 1.9;
+        }
+
+        .footer-note {
+            background: #f6f0ea;
+            border-radius: 18px;
+            padding: 16px 20px;
+            border: 1px solid #eee4da;
+            font-size: 13px;
+            color: #6a5a4a;
             line-height: 2;
         }
 
         .footer-note strong {
-            font-weight: 500;
             color: #3d2e24;
         }
 
         .footer-note .update {
             font-size: 12px;
-            color: #b09684;
-            margin-top: 2px;
+            color: #b8a292;
+            margin-top: 4px;
         }
 
-        .sign {
+        /* ===== 底部 ===== */
+        .footer-sign {
             text-align: center;
-            margin-top: 32px;
-            font-size: 12px;
-            color: #d0bcaa;
-            letter-spacing: 3px;
+            margin-top: 36px;
+            font-size: 13px;
+            color: #d0bcac;
+            letter-spacing: 4px;
             font-weight: 300;
         }
 
-        /* ============================================================ */
-        /* 响应式 */
-        /* ============================================================ */
-        @media (max-width: 700px) {
-            .app {
-                flex-direction: column;
-                max-width: 100%;
-                margin: 0;
-                min-height: auto;
+        /* ===== 响应式 ===== */
+        @media (max-width: 500px) {
+            .container {
+                padding: 24px 16px 32px;
+                border-radius: 36px 36px 20px 20px;
+            }
+            .container::before {
+                height: 4px;
+                border-radius: 36px 36px 0 0;
             }
 
-            .sidebar {
-                width: 100%;
-                height: auto;
-                position: static;
-                padding: 14px 18px 12px;
-                border-right: none;
-                border-bottom: 1px solid #e8dfd6;
-                flex-direction: row;
-                align-items: center;
-                justify-content: space-between;
-                flex-wrap: wrap;
-                gap: 6px 10px;
-            }
-
-            .sidebar .brand {
-                font-size: 16px;
-                margin-bottom: 0;
-            }
-            .sidebar .brand-sub {
-                display: none;
-            }
-
-            .sidebar .toc-list {
-                flex-direction: row;
-                flex-wrap: wrap;
-                gap: 2px 4px;
-            }
-
-            .sidebar .toc-list a {
-                font-size: 11.5px;
-                padding: 3px 8px;
-            }
-
-            .sidebar .footer-mini {
-                display: none;
-            }
-
-            .main {
-                padding: 20px 16px 34px;
-            }
-
-            .header-mini h1 {
+            .header h1 {
                 font-size: 20px;
             }
+            .header-avatar {
+                width: 60px;
+                height: 60px;
+                line-height: 60px;
+                font-size: 32px;
+            }
 
-            .grid-2 {
+            .name-cards {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+            .name-card {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                padding: 10px 14px;
+                text-align: left;
+            }
+            .name-card .name {
+                font-size: 16px;
+            }
+            .name-card .desc {
+                margin-top: 0;
+                font-size: 11px;
+            }
+            .name-card .tag {
+                margin-top: 0;
+                margin-left: auto;
+                font-size: 10px;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 6px;
+            }
+            .info-tag {
+                font-size: 12px;
+                padding: 6px 12px;
+            }
+
+            .rule-cards {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+            .rule-card.full {
+                grid-column: 1;
+            }
+
+            .hobby-grid {
+                grid-template-columns: 1fr 1fr 1fr;
+                gap: 6px;
+            }
+            .hobby-item {
+                padding: 10px 4px;
+            }
+            .hobby-item .h-icon {
+                font-size: 18px;
+            }
+            .hobby-item .h-name {
+                font-size: 11px;
+            }
+
+            .taste-grid {
                 grid-template-columns: 1fr;
                 gap: 8px;
             }
 
-            .game-bar .name {
-                width: 80px;
-                font-size: 12px;
+            .warning-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 6px;
             }
-            .game-bar .track {
-                max-width: 100px;
-            }
-
-            .hobby-grid {
-                gap: 8px 14px;
-            }
-            .hobby-dot {
-                font-size: 12px;
-            }
-
-            .block p,
-            .block li {
-                font-size: 13px;
-            }
-            .underline-tag {
-                font-size: 12px;
-                margin-right: 8px;
-            }
-            .char-block {
-                font-size: 12px;
-                padding-right: 8px;
-                margin-right: 4px;
-            }
-            .warning-block p {
-                font-size: 12.5px;
-            }
-            .header-mini .tags span {
+            .warning-chip {
                 font-size: 11px;
+                padding: 5px 12px;
             }
-            .glass-card p {
-                font-size: 13px;
+
+            .toc {
+                padding: 10px 0 14px;
+                gap: 2px 4px;
+            }
+            .toc a {
+                font-size: 11px;
+                padding: 2px 10px;
+            }
+            .header-tags span {
+                font-size: 11px;
+                padding: 2px 12px;
+            }
+            .section-header h2 {
+                font-size: 15px;
+            }
+            .attr-content .chip {
+                font-size: 11px;
+                padding: 1px 12px;
+            }
+            .attr-list li {
+                font-size: 12px;
+            }
+            .quote-block p {
+                font-size: 12px;
+            }
+            .footer-note {
+                font-size: 12px;
+                padding: 14px 16px;
+            }
+            .game-stat {
+                font-size: 12px;
+                padding: 12px 14px;
+            }
+            .showcase-block .s-item {
+                font-size: 12px;
             }
         }
 
-        @media (max-width: 420px) {
-            .main {
-                padding: 14px 10px 28px;
+        @media (max-width: 380px) {
+            .container {
+                padding: 18px 12px 24px;
             }
-            .header-mini h1 {
-                font-size: 18px;
+            .header h1 {
+                font-size: 17px;
             }
-            .block p,
-            .block li {
-                font-size: 12.5px;
-                line-height: 1.8;
+            .hobby-grid {
+                grid-template-columns: 1fr 1fr;
             }
-            .sidebar .toc-list a {
-                font-size: 10.5px;
-                padding: 2px 6px;
+            .info-grid {
+                grid-template-columns: 1fr;
             }
-            .sidebar {
-                padding: 10px 12px 10px;
+            .warning-grid {
+                grid-template-columns: 1fr;
             }
-            .sidebar .brand {
+            .section-header h2 {
                 font-size: 14px;
-            }
-            .game-bar .name {
-                width: 64px;
-                font-size: 11px;
-            }
-            .game-bar .track {
-                max-width: 70px;
-            }
-            .game-bar .status {
-                font-size: 10px;
-            }
-            .hobby-dot {
-                font-size: 11px;
-                gap: 4px;
-            }
-            .hobby-dot .dot {
-                width: 5px;
-                height: 5px;
-            }
-            .grid-2 .item .text {
-                font-size: 12px;
-            }
-            .char-block {
-                font-size: 11px;
-                padding-right: 6px;
-            }
-            .underline-tag {
-                font-size: 11px;
-                margin-right: 6px;
             }
         }
     </style>
 </head>
 <body>
 
-    <div class="app">
+    <div class="container">
 
-        <!-- ===== 侧边栏 ===== -->
-        <aside class="sidebar">
-            <div>
-                <div class="brand">猫巷</div>
-                <div class="brand-sub">· 自介 ·</div>
+        <!-- ===== 头部 ===== -->
+        <div class="header">
+            <div class="header-avatar">🌿</div>
+            <h1>关于我 · 自介</h1>
+            <p class="sub">「 语言是社会文化的镜子。 」</p>
+            <div class="header-tags">
+                <span>INFP-T</span>
+                <span>慢热</span>
+                <span>理想主义</span>
+                <span>剧情党</span>
             </div>
-            <ul class="toc-list">
-                <li><a href="#sec01"><span class="num">01</span>昵称</a></li>
-                <li><a href="#sec02"><span class="num">02</span>基本信息</a></li>
-                <li><a href="#sec03"><span class="num">03</span>空间说明书</a></li>
-                <li><a href="#sec04"><span class="num">04</span>爱好与喜好</a></li>
-                <li><a href="#sec05"><span class="num">05</span>具体属性</a></li>
-                <li><a href="#sec06"><span class="num">06</span>雷点与备注</a></li>
+        </div>
+
+        <!-- ===== 目录 ===== -->
+        <div class="toc">
+            <span class="toc-label">目录</span>
+            <a href="#sec01">01</a>
+            <a href="#sec02">02</a>
+            <a href="#sec03">03</a>
+            <a href="#sec04">04</a>
+            <a href="#sec05">05</a>
+            <a href="#sec06">06</a>
+        </div>
+
+        <!-- ============================================================ -->
+        <!-- 01 昵称 — 名片式 -->
+        <!-- ============================================================ -->
+        <div class="section" id="sec01">
+            <div class="section-header">
+                <span class="num">01</span>
+                <h2>昵称</h2>
+            </div>
+            <div class="name-cards">
+                <div class="name-card">
+                    <span class="name">猫巷</span>
+                    <span class="desc">QQ 昵称<br>买谷顺手当 cn</span>
+                    <span class="tag">常用</span>
+                </div>
+                <div class="name-card">
+                    <span class="name">付弦</span>
+                    <span class="desc">无期迷途 id<br>游戏常用名</span>
+                    <span class="tag">常用</span>
+                </div>
+                <div class="name-card">
+                    <span class="name">秋籁</span>
+                    <span class="desc">设计圈名<br>水印用这个</span>
+                    <span class="tag">新</span>
+                </div>
+            </div>
+            <p class="name-note">※ 以前还有其它写作圈名，因软件倒闭且未发布作品，故略</p>
+        </div>
+
+        <!-- ============================================================ -->
+        <!-- 02 基本信息 — 属性标签墙 -->
+        <!-- ============================================================ -->
+        <div class="section" id="sec02">
+            <div class="section-header">
+                <span class="num">02</span>
+                <h2>基本信息</h2>
+            </div>
+            <div class="info-grid">
+                <div class="info-tag highlight"><span class="icon">🧩</span> INFP-T</div>
+                <div class="info-tag"><span class="icon">📅</span> 04年 · 工科生</div>
+                <div class="info-tag"><span class="icon">💬</span> 认真 · 好说话</div>
+                <div class="info-tag"><span class="icon">☮️</span> 不喜冲突 · 可单删</div>
+            </div>
+            <ul class="info-list">
+                <li>内敛，间歇性社恐，轻微强迫症，不大玩抽象</li>
+                <li>超级慢热，主动性低，不是不喜欢而是不知说什么</li>
+                <li>脑袋里有一万个为什么，喜欢浪漫优美的东西</li>
+                <li>不喜欢直白的玩笑，偏爱 1v1 交流</li>
             </ul>
-            <div class="footer-mini">✦ 欢迎来找我玩</div>
-        </aside>
+        </div>
 
-        <!-- ===== 主内容 ===== -->
-        <main class="main">
-
-            <!-- 头部 -->
-            <header class="header-mini">
-                <div class="greeting">🌿 关于我</div>
-                <h1>自介 · 个人档案</h1>
-                <div class="sub">「 语言是社会文化的镜子。 」</div>
-                <div class="tags">
-                    <span>INFP-T</span>
-                    <span>慢热</span>
-                    <span>理想主义</span>
-                    <span>剧情党</span>
+        <!-- ============================================================ -->
+        <!-- 03 空间说明书 — 规则卡片 -->
+        <!-- ============================================================ -->
+        <div class="section" id="sec03">
+            <div class="section-header">
+                <span class="num">03</span>
+                <h2>空间说明书</h2>
+            </div>
+            <div class="rule-cards">
+                <div class="rule-card">
+                    <span class="rule-icon">📷</span>
+                    <div class="rule-title">日常分享</div>
+                    <div class="rule-desc">风景 · 小猫 · 日常记录<br>不曝照曝声</div>
                 </div>
-            </header>
-
-            <!-- ========================================================== -->
-            <!-- 01 昵称 -->
-            <!-- ========================================================== -->
-            <section class="block" id="sec01">
-                <div class="block-label">01</div>
-                <ul>
-                    <li><strong>猫巷</strong>：QQ 昵称，因为买谷懒得再想一个名字，于是干脆拿来当 cn。</li>
-                    <li><strong>付弦</strong>：无期迷途里的 id 名，因为常用所以也被拿来当 cn 了。</li>
-                    <li><strong>秋籁</strong>：打算作为设计圈名啦，以后平面设计的水印也会打这两个字。</li>
-                </ul>
-                <p style="font-size:12px;color:#b09684;margin-top:4px;">※ 以前因写作还有其它圈名，但软件倒闭、时日已久且未发布作品，故略。</p>
-            </section>
-
-            <!-- ========================================================== -->
-            <!-- 02 基本信息 -->
-            <!-- ========================================================== -->
-            <section class="block" id="sec02">
-                <div class="block-label">02</div>
-                <div class="glass-card">
-                    <p>INFP-T · 04年工科生 · 认真且好说话 · 不喜冲突</p>
+                <div class="rule-card">
+                    <span class="rule-icon">🎮</span>
+                    <div class="rule-title">内容方向</div>
+                    <div class="rule-desc">游戏剧情 · 周边棉娃<br>碎碎念 · 转发</div>
                 </div>
-                <ul>
-                    <li>内敛，间歇性社恐，轻微强迫症，不大玩抽象；</li>
-                    <li>超级慢热，主动性可能较低，不是不喜欢，而是不知能说什么；</li>
-                    <li>喜欢思考很多事情，脑袋里有一万个为什么；</li>
-                    <li>喜欢浪漫优美的东西，不喜欢直白的玩笑；</li>
-                    <li>比较喜欢 1v1 交流，人多不是舒适区，进群大多潜水。</li>
-                </ul>
-            </section>
-
-            <!-- ========================================================== -->
-            <!-- 03 空间说明书 -->
-            <!-- ========================================================== -->
-            <section class="block" id="sec03">
-                <div class="block-label">03</div>
-                <ul>
-                    <li>二三次分号，但仍会有日常分享（风景照、遇到的小猫、日常记录等），不涉及曝照曝声。</li>
-                    <li>会发游戏剧情截图 / 周边棉娃照片 / 日常生活 / 碎碎念，偶尔转发喜欢的说说。</li>
-                    <li>能量低的时候会躺列（不刷不赞不评），但小窗持续开放。</li>
-                </ul>
-            </section>
-
-            <!-- ========================================================== -->
-            <!-- 04 爱好与喜好倾向 -->
-            <!-- ========================================================== -->
-            <section class="block" id="sec04">
-                <div class="block-label">04</div>
-
-                <p style="font-weight:450;color:#3d2e24;font-size:14px;margin-top:2px;">爱好 · 较杂</p>
-
-                <!-- 圆点阵列 -->
-                <div class="hobby-grid">
-                    <span class="hobby-dot"><span class="dot"></span>看书</span>
-                    <span class="hobby-dot"><span class="dot"></span>平面设计</span>
-                    <span class="hobby-dot"><span class="dot"></span>写小说</span>
-                    <span class="hobby-dot"><span class="dot"></span>游戏</span>
-                    <span class="hobby-dot"><span class="dot"></span>听歌唱歌</span>
-                    <span class="hobby-dot"><span class="dot"></span>做饭</span>
-                    <span class="hobby-dot"><span class="dot dim"></span>小动物</span>
-                    <span class="hobby-dot"><span class="dot dim"></span>棉娃周边</span>
-                    <span class="hobby-dot"><span class="dot dim"></span>拼豆</span>
+                <div class="rule-card full">
+                    <span class="rule-icon">🔇</span>
+                    <div class="rule-title">能量低时</div>
+                    <div class="rule-desc">躺列（不刷不赞不评），但小窗持续开放</div>
                 </div>
+            </div>
+        </div>
 
-                <p style="font-size:13px;color:#8a7a6a;margin-bottom:8px;">喜欢探索可爱、有趣、好玩儿的、需逻辑的东西</p>
+        <!-- ============================================================ -->
+        <!-- 04 爱好与喜好倾向 — 图标网格 + 双栏 -->
+        <!-- ============================================================ -->
+        <div class="section" id="sec04">
+            <div class="section-header">
+                <span class="num">04</span>
+                <h2>爱好与喜好倾向</h2>
+            </div>
+            <p class="hobby-note">✦ 喜欢探索可爱、有趣、好玩儿的、需逻辑的东西</p>
+            <div class="hobby-grid">
+                <div class="hobby-item"><span class="h-icon">📚</span><span class="h-name">看书</span></div>
+                <div class="hobby-item"><span class="h-icon">🎨</span><span class="h-name">平面设计</span></div>
+                <div class="hobby-item"><span class="h-icon">✍️</span><span class="h-name">写小说</span></div>
+                <div class="hobby-item"><span class="h-icon">🎮</span><span class="h-name">游戏</span></div>
+                <div class="hobby-item"><span class="h-icon">🎤</span><span class="h-name">听歌唱歌</span></div>
+                <div class="hobby-item"><span class="h-icon">🍳</span><span class="h-name">做饭</span></div>
+                <div class="hobby-item"><span class="h-icon">🐾</span><span class="h-name">小动物</span></div>
+                <div class="hobby-item"><span class="h-icon">🧸</span><span class="h-name">棉娃周边</span></div>
+                <div class="hobby-item"><span class="h-icon">🧩</span><span class="h-name">拼豆</span></div>
+            </div>
 
-                <!-- 游戏属性 + 进度条 -->
-                <p style="font-weight:450;color:#3d2e24;font-size:14px;margin-top:10px;">游戏属性</p>
-                <div class="glass-card">
-                    <p>剧情党 · 以享受剧情故事为主</p>
-                    <p style="font-size:13px;color:#6a5a4a;margin-top:2px;">整体属性：<strong style="color:#3d2e24;">剧情</strong> &gt; 图鉴 &gt; 强度</p>
+            
+
+            <div class="game-stat">
+                🎮 游戏属性：<strong>剧情</strong> &gt; 图鉴 &gt; 强度 &nbsp;·&nbsp; 半个剧情党，享受故事会发表感受
+            </div>
+
+            <div class="taste-grid">
+                <div class="taste-card">
+                    <span class="t-label">📌 偏好小说</span>
+                    <div class="t-content">GL · 双女主 · 女性群像 · 女主无CP</div>
+                    <div class="t-sub">互攻 · 双向奔赴 · HE</div>
                 </div>
-
-                <div class="divider"></div>
-
-                <p style="font-weight:450;color:#3d2e24;font-size:14px;margin-top:2px;">喜好倾向</p>
-
-                <div class="grid-2">
-                    <div class="item">
-                        <span class="label">偏好小说</span>
-                        <div class="text">GL · 双女主 · 女性群像 · 女主无CP</div>
-                        <div class="sub">互攻 · 双向奔赴 · HE</div>
-                    </div>
-                    <div class="item">
-                        <span class="label">逐步了解中</span>
-                        <div class="text">心理学 · 女性主义</div>
-                    </div>
+                <div class="taste-card">
+                    <span class="t-label">🌱 逐步了解中</span>
+                    <div class="t-content">心理学 · 女性主义</div>
                 </div>
+            </div>
 
-                <!-- 展示条 -->
-                <div class="showcase-line">
-                    <span class="label">一些展示</span>
-                    <span>小短篇《世界角落的我》</span>
-                    <span>平面设计「封赏」</span>
+            <div class="showcase-block">
+                <span class="s-label">🖼 一些展示</span>
+                <span class="s-item">小短篇《世界角落的我》</span>
+                <span class="s-item">平面设计「封赏」</span>
+            </div>
+        </div>
+
+        <!-- ============================================================ -->
+        <!-- 05 具体属性 — 分类折叠卡 -->
+        <!-- ============================================================ -->
+        <div class="section" id="sec05">
+            <div class="section-header">
+                <span class="num">05</span>
+                <h2>具体属性</h2>
+            </div>
+
+            <div class="attr-group">
+                <div class="attr-label">
+                    <span class="a-icon">📖</span> 一次元 > 小说
+                    <span class="a-tag">top 作者：桑鲤</span>
                 </div>
-            </section>
-
-            <!-- ========================================================== -->
-            <!-- 05 具体属性 -->
-            <!-- ========================================================== -->
-            <section class="block" id="sec05">
-                <div class="block-label">05</div>
-
-                <p style="font-weight:450;color:#3d2e24;font-size:14px;">一次元 · 小说</p>
-                <ul>
-                    <li><strong>top 作者：</strong>桑鲤</li>
-                    <li><strong>top 作品：</strong>《若相离》《阴缘结》《弃仙》《晚星》《让我寄生一下》《灵祭》……</li>
-                </ul>
-
-                <div class="divider"></div>
-
-                <p style="font-weight:450;color:#3d2e24;font-size:14px;">一点五次元 · 原创部分</p>
-                <ul>
-                    <li><strong>广播剧：</strong>《离开与你相遇的世界》《申请》</li>
-                </ul>
-
-                <div class="divider"></div>
-
-                <p style="font-weight:450;color:#3d2e24;font-size:14px;">二次元 · 游戏</p>
-
-                <!-- 进度条状态 -->
-                <div class="game-bar-group">
-                    <div class="game-bar">
-                        <span class="name">无期迷途</span>
-                        <span class="track"><span class="fill" style="width:90%;"></span></span>
-                        <span class="status">在线</span>
-                    </div>
-                    <div class="game-bar">
-                        <span class="name">桃源深处有人家</span>
-                        <span class="track"><span class="fill" style="width:75%;"></span></span>
-                        <span class="status">在线</span>
-                    </div>
-                    <div class="game-bar">
-                        <span class="name">烟雨江湖</span>
-                        <span class="track"><span class="fill" style="width:60%;"></span></span>
-                        <span class="status">在线</span>
-                    </div>
-                    <div class="game-bar">
-                        <span class="name">重返未来1999</span>
-                        <span class="track"><span class="fill dim" style="width:30%;"></span></span>
-                        <span class="status">淡坑</span>
-                    </div>
+                <div class="attr-content">
+                    <span class="chip">《若相离》</span>
+                    <span class="chip">《阴缘结》</span>
+                    <span class="chip">《弃仙》</span>
+                    <span class="chip">《晚星》</span>
+                    <span class="chip">《让我寄生一下》</span>
+                    <span class="chip">《灵祭》</span>
+                    <span class="chip outline">……</span>
                 </div>
+            </div>
 
-                <!-- 心水角色：方块排列 -->
-                <p style="font-weight:450;color:#3d2e24;font-size:13px;margin-top:8px;">心水角色</p>
-                <div class="char-grid">
-                    <span class="char-block">000</span>
-                    <span class="char-block">茉莉</span>
-                    <span class="char-block">希露姐</span>
-                    <span class="char-block">砚昙</span>
-                    <span class="char-block">阿梨</span>
+            <div class="attr-divider"></div>
+
+            <div class="attr-group">
+                <div class="attr-label">
+                    <span class="a-icon">🎧</span> 一点五次元
                 </div>
+                <div class="attr-content">
+                    <span class="chip">广播剧《离开与你相遇的世界》</span>
+                    <span class="chip">广播剧《申请》</span>
+                </div>
+            </div>
 
-                <p style="font-weight:450;color:#3d2e24;font-size:13px;margin-top:6px;">心水剧情</p>
-                <ul>
+            <div class="attr-divider"></div>
+
+            <div class="attr-group">
+                <div class="attr-label">
+                    <span class="a-icon">🎮</span> 二次元 > 游戏
+                </div>
+                <div class="attr-content" style="flex-wrap:wrap;gap:4px 8px;">
+                    <span class="chip">在线 《无期迷途》</span>
+                    <span class="chip">在线 《桃源深处有人家》</span>
+                    <span class="chip">在线 《烟雨江湖》</span>
+                    <span class="chip outline">淡坑 《重返未来1999》</span>
+                </div>
+            </div>
+
+            <div class="attr-group">
+                <div class="attr-label" style="font-size:12px;font-weight:500;color:#5a4a3a;">
+                    💜 心水角色
+                </div>
+                <div class="attr-content">
+                    <span class="chip-sm">000</span>
+                    <span class="chip-sm">茉莉</span>
+                    <span class="chip-sm">希露姐</span>
+                    <span class="chip-sm">砚昙</span>
+                    <span class="chip-sm">阿梨</span>
+                </div>
+            </div>
+
+            <div class="attr-group">
+                <div class="attr-label" style="font-size:12px;font-weight:500;color:#5a4a3a;">
+                    📜 心水剧情
+                </div>
+                <ul class="attr-list">
                     <li><strong>无期迷途：</strong>主线与大部分支线活动</li>
                     <li><strong>桃源深处有人家：</strong>《故梦宫深之梨花未雨》</li>
                     <li><strong>重返未来1999：</strong>《再见，来亚什基》</li>
                 </ul>
+            </div>
 
-                <div class="divider"></div>
+            <div class="attr-divider"></div>
 
-                <p style="font-weight:450;color:#3d2e24;font-size:14px;">三次元 · 影综</p>
-                <ul>
-                    <li><strong>综艺：</strong>《女子推理社》1、2 两季</li>
-                    <li><strong>电影：</strong>《还有明天》</li>
-                </ul>
-
-                <div class="divider"></div>
-
-                <p style="font-weight:450;color:#3d2e24;font-size:14px;">喜欢的 UP</p>
-                <div class="tag-group">
-                    <span class="underline-tag">萌宠 @猫猫派掌门</span>
-                    <span class="underline-tag">游戏 @秋秋秋禾火</span>
-                    <span class="underline-tag">美食 @香蕉柿子梨</span>
-                    <span class="underline-tag">生活 @一亩秋葵</span>
-                    <span class="underline-tag muted">其他 @对话中的暂停</span>
+            <div class="attr-group">
+                <div class="attr-label">
+                    <span class="a-icon">📺</span> 三次元 > 影综
                 </div>
-                <p style="font-size:12px;color:#b09684;margin-top:2px;">※ 当然不止这些，列出来的是最喜欢的部分。</p>
-            </section>
-
-            <!-- ========================================================== -->
-            <!-- 06 雷点与备注 -->
-            <!-- ========================================================== -->
-            <section class="block" id="sec06">
-                <div class="block-label">06</div>
-
-                <p style="font-weight:450;color:#3d2e24;font-size:14px;">雷点汇总</p>
-
-                <p style="font-weight:400;color:#5a4a3a;font-size:13px;margin-top:4px;">作品相关</p>
-                <ul>
-                    <li>扶她 / 性转相关内容</li>
-                    <li>哪吒2 电影</li>
-                </ul>
-
-                <p style="font-weight:400;color:#5a4a3a;font-size:13px;margin-top:6px;">其它</p>
-                <ul>
-                    <li>不尊重人 / 角色，满口脏话、爱说教</li>
-                    <li>侵权</li>
-                    <li>厌女辱女，乱开黄色玩笑、恶俗梗</li>
-                    <li>对男同无感，不歧视，尊重理解但不爱看</li>
-                </ul>
-
-                <div class="warning-block">
-                    <div class="title">关于观点交流</div>
-                    <p>
-                        对于我在说说发表的观点，我欢迎有不同意见的朋友来评论，但我希望我们可以平等的、温和地沟通。如果我有什么做得不对的，比如对某个观点言辞不当，也可以指出，而不是上来就指责我，说我大错特错，对我完全否定，并且只是抱着说赢我的目的评论，无法沟通。
-                    </p>
-                    <p style="margin-top:6px;">
-                        那么我会觉得这个人态度不好，态度影响我看待其观点的客观性，我自认态度已经很好了，还是受不了，觉得我思想有问题，那咱互删吧，我无能为力了。
-                    </p>
+                <div class="attr-content">
+                    <span class="chip">综艺《女子推理社》1、2季</span>
+                    <span class="chip">电影《还有明天》</span>
                 </div>
+            </div>
 
-                <div class="divider"></div>
+            <div class="attr-divider"></div>
 
-                <p style="font-weight:450;color:#3d2e24;font-size:14px;">末尾备注</p>
-                <div class="footer-note">
-                    <p>
-                        我是将空间当成我的小居所的，因此我不追求赞评转，发说说是因为喜欢。<br>
-                        如果觉得雷到你了可以直接单删，在我看来扩列的初衷是找到爱好一致的同好，若是觉得勉强可以直接从根源上解决问题，我不介意，所以也不必和我解释。
-                    </p>
-                    <div class="divider"></div>
-                    <div class="update">
-                        <strong>※ 此帖子将不定时更新</strong><br>
-                        人在成长，所以偶尔会察觉到自己的喜好会变，在此先行致歉。
-                    </div>
+            <div class="attr-group">
+                <div class="attr-label">
+                    <span class="a-icon">🫶</span> 喜欢的 UP
                 </div>
-            </section>
+                <div class="attr-content" style="flex-wrap:wrap;gap:4px 8px;">
+                    <span class="chip-sm">萌宠 @猫猫派掌门</span>
+                    <span class="chip-sm">游戏 @秋秋秋禾火</span>
+                    <span class="chip-sm">美食 @香蕉柿子梨</span>
+                    <span class="chip-sm">生活 @一亩秋葵</span>
+                    <span class="chip-sm">其他 @对话中的暂停</span>
+                </div>
+                <p class="attr-note">※ 当然不止这些，列出来的是最喜欢的部分</p>
+            </div>
+        </div>
 
-            <div class="sign">✦ 欢迎来找我玩 ✦</div>
+        <!-- ============================================================ -->
+        <!-- 06 雷点与备注 — 警示列表 + 引文块 -->
+        <!-- ============================================================ -->
+        <div class="section" id="sec06">
+            <div class="section-header">
+                <span class="num">06</span>
+                <h2>雷点与备注</h2>
+            </div>
 
-        </main>
+            <div class="warning-grid">
+                <div class="warning-chip"><span class="w-icon">🚫</span> 扶她 / 性转</div>
+                <div class="warning-chip"><span class="w-icon">🚫</span> 哪吒2 电影</div>
+                <div class="warning-chip"><span class="w-icon">🚫</span> 不尊重人 · 满口脏话</div>
+                <div class="warning-chip"><span class="w-icon">🚫</span> 侵权</div>
+                <div class="warning-chip"><span class="w-icon">🚫</span> 厌女辱女 · 恶俗梗</div>
+                <div class="warning-chip"><span class="w-icon">🚫</span> 对男同无感（尊重但不爱看）</div>
+            </div>
+
+            <div class="warning-divider"></div>
+
+            <div class="quote-block">
+                <div class="q-label">📌 关于观点交流</div>
+                <p>
+                    我欢迎不同意见，但希望是平等、温和的沟通。如果我的某个观点言辞不当，可以指出，而不是上来就指责、完全否定、只是为了说赢我。
+                </p>
+                <p style="margin-top:4px;">
+                    态度影响我看待观点的客观性。我自认态度已经很好了，如果还是受不了，觉得我思想有问题，那咱互删吧，我无能为力了。
+                </p>
+            </div>
+
+            <div class="footer-note">
+                <div class="q-label">📌 一点备注</div>
+                <p>
+                    我是将空间当成我的小居所的，不追求赞评转，发说说是因为喜欢。<br>
+                    如果雷到你了可以直接单删，不必解释。
+                </p>
+                <div class="warning-divider"></div>
+                <div class="update">
+                    <strong>※ 此帖子将不定时更新</strong><br>
+                    人在成长，喜好偶尔会变，先行致歉。
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== 底部 ===== -->
+        <div class="footer-sign">
+            ✦ 欢迎来找我玩 ✦
+        </div>
 
     </div>
 
