@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>《世界角落的我》· 短篇</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: #eae3db;
+            padding: 20px 14px 50px;
+            color: #2c241e;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .container {
+            max-width: 560px;
+            width: 100%;
+        }
+
+        /* ===== 返回按钮 ===== */
+        .back-bar {
+            margin-bottom: 14px;
+        }
+
+        .back-btn {
+            display: inline-block;
+            background: #f3ede7;
+            border-radius: 30px;
+            padding: 6px 18px;
+            font-size: 13px;
+            color: #6a5a4a;
+            text-decoration: none;
+            transition: 0.25s;
+            font-weight: 450;
+        }
+
+        .back-btn:hover {
+            background: #dbb594;
+            color: #fff;
+            transform: translateX(-4px);
+        }
+
+        .back-btn::before {
+            content: "← ";
+        }
+
+        /* ===== 卡片 ===== */
+        .card {
+            background: #fcf8f4;
+            border-radius: 28px;
+            padding: 28px 26px 32px;
+            box-shadow: 0 2px 16px rgba(140, 110, 80, 0.06);
+        }
+
+        /* ===== 标题区 ===== */
+        .story-header {
+            text-align: center;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #efe6de;
+            margin-bottom: 24px;
+        }
+
+        .story-header .tag {
+            font-size: 11px;
+            color: #b09684;
+            background: #f3ede7;
+            padding: 2px 14px;
+            border-radius: 30px;
+            display: inline-block;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .story-header h1 {
+            font-size: 22px;
+            font-weight: 600;
+            color: #3d2e24;
+            letter-spacing: 2px;
+            line-height: 1.4;
+        }
+
+        .story-header .subtitle {
+            font-size: 13px;
+            color: #b09684;
+            margin-top: 4px;
+            font-style: italic;
+            letter-spacing: 1px;
+        }
+
+        /* ===== 正文 ===== */
+        .story-body {
+            font-size: 15px;
+            color: #3d322a;
+            line-height: 2;
+        }
+
+        .story-body .chapter {
+            font-size: 14px;
+            font-weight: 600;
+            color: #3d2e24;
+            letter-spacing: 3px;
+            text-align: center;
+            margin: 28px 0 14px;
+            padding-top: 20px;
+            border-top: 1px solid #efe6de;
+        }
+
+        .story-body .chapter:first-of-type {
+            border-top: none;
+            padding-top: 0;
+            margin-top: 0;
+        }
+
+        .story-body p {
+            text-indent: 2em;
+            margin-bottom: 10px;
+        }
+
+        .story-body .dialogue {
+            text-indent: 0;
+            padding-left: 1.5em;
+            margin-bottom: 6px;
+        }
+
+        /* ===== 引用句 ===== */
+        .story-body .quote-line {
+            text-align: center;
+            font-style: italic;
+            color: #b09684;
+            font-size: 14px;
+            text-indent: 0;
+            margin: 16px 0;
+            padding: 8px 0;
+            border-top: 1px dashed #efe6de;
+            border-bottom: 1px dashed #efe6de;
+        }
+
+        /* ===== 底部 ===== */
+        .story-footer {
+            margin-top: 28px;
+            padding-top: 18px;
+            border-top: 2px solid #efe6de;
+            text-align: center;
+        }
+
+        .story-footer .footer-back {
+            display: inline-block;
+            background: #f3ede7;
+            border-radius: 30px;
+            padding: 6px 22px;
+            font-size: 13px;
+            color: #6a5a4a;
+            text-decoration: none;
+            transition: 0.25s;
+            font-weight: 450;
+            margin-top: 6px;
+        }
+
+        .story-footer .footer-back:hover {
+            background: #dbb594;
+            color: #fff;
+            transform: translateX(-4px);
+        }
+
+        .story-footer .footer-back::before {
+            content: "← ";
+        }
+
+        .story-footer .footer-end {
+            display: block;
+            font-size: 12px;
+            color: #c0b0a0;
+            letter-spacing: 2px;
+            margin-bottom: 6px;
+        }
+
+        /* ================================================================ */
+        /* 响应式 */
+        /* ================================================================ */
+        @media (max-width: 480px) {
+            body {
+                padding: 14px 10px 36px;
+            }
+            .card {
+                padding: 20px 16px 24px;
+                border-radius: 24px;
+            }
+            .story-header h1 {
+                font-size: 19px;
+                letter-spacing: 1px;
+            }
+            .story-body {
+                font-size: 14px;
+                line-height: 1.9;
+            }
+            .story-body .chapter {
+                font-size: 13px;
+                margin: 22px 0 12px;
+            }
+            .back-btn {
+                font-size: 12px;
+                padding: 5px 14px;
+            }
+            .story-footer .footer-back {
+                font-size: 12px;
+                padding: 5px 16px;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .card {
+                padding: 16px 12px 20px;
+                border-radius: 20px;
+            }
+            .story-header h1 {
+                font-size: 17px;
+            }
+            .story-body {
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <!-- ===== 顶部返回 ===== -->
+        <div class="back-bar">
+            <a href="javascript:history.back()" class="back-btn">返回主页</a>
+        </div>
+
+        <!-- ===== 正文卡片 ===== -->
+        <div class="card">
+
+            <div class="story-header">
+                <span class="tag">短篇</span>
+                <h1>《世界角落的我》</h1>
+                <p class="subtitle">—— 写给自己的"情书"</p>
+            </div>
+
+            <div class="story-body">
+
+                <!-- 01 -->
+                <div class="chapter">01</div>
+
+                <p>在我的刀将手臂划出一道伤痕之前，有人抓住了我的手臂。</p>
+
+                <p>我抬头，在一片泪光中看到了模糊但熟悉的身影。</p>
+
+                <p>……她是谁？</p>
+
+                <p>那人将我拥入怀抱，世界好像安静了下来，我闭眼放纵自己痛哭一场，身后的手轻拍着我的背。</p>
+
+                <p>明明她什么都没说……</p>
+
+                <p>不知过了多久，在我哭声渐熄时，她轻轻开口："别怕，以后有我在。"</p>
+
+                <p>短短一句话再次让我泪崩。</p>
+
+                <p>我不知道她有什么神奇的能力，一句话就能让我安心，也或许我这个阶段就是容易听信他人的……</p>
+
+                <p>但我就是知道，她不一样。</p>
+
+                <p>这句话由她嘴里和别人嘴里说出来的感觉不一样。</p>
+
+                <p>也许……也许是我幻想中的那个人来了吧。</p>
+
+                <p>幻想着"拯救我"的那个人……</p>
+
+                <!-- 02 -->
+                <div class="chapter">02</div>
+
+                <p>我住宿了。</p>
+
+                <p>但我很不习惯。</p>
+
+                <p>我融入不了这个群体……我甚至没有与她们对话的勇气，哪怕是从我的床铺走到阳台，都像百步梯那么长，那么煎熬，仿佛所有人都在审视着我，审视我走的每一步。</p>
+
+                <p>我没办法不这么想。</p>
+
+                <p>毕竟我只是一个刚刚走出自闭圈的人，还不适应这个突然嘈杂的世界。</p>
+
+                <p>我只想念曾经住在互联网中的自己，那样的我至少还有一层面具。</p>
+
+                <p>某天夜里，因着白日受到的委屈，无可避免湿了眼睛，我想我在这个宿舍如此不合群，找不到一个说话的人，我该怎么办呢？</p>
+
+                <p>我没法独自一个人，也没法融入群体，我该怎么办呢？</p>
+
+                <p>我无措，看着我的朋友在新的宿舍环境交到好朋友，似乎整个世界只有我不一样，只有我没法与人交涉，只有我找不到新朋友……</p>
+
+                <p>我该怎么办呢？</p>
+
+                <p>这个时候，她又出现了。</p>
+
+                <p>我不知她是如何经过校门与宿舍楼门口的阻拦来到我床边的，当时哭泣的我只是鼻尖闻到一股熟悉的香味，就立刻知晓来者何人，而后不顾三七二十一，揪住对方的衣领就抱了上去，只是仍压低声音哭泣。</p>
+
+                <p>她轻轻提醒我，她施了个魔法，现在整个世界的时间都暂停了，我可以尽情的流泪，宣泄委屈。</p>
+
+                <p>听她这么说，我就这么干了，只是我仍然害怕在这个多人的地方说她们的坏话会被听到，于是拉着她躲进了楼梯口，断断续续说着一切。</p>
+
+                <p>她安慰着我，指导我该如何做，最后的最后，她又一次对我说："别怕，有我在。"</p>
+
+                <p class="dialogue">"我会保护你的，当你想我的时候……给倾韵发个消息吧。"</p>
+
+                <p>与上一次不同，她给了我联系方式。</p>
+
+                <p>倾韵……是我建的小号的名字。</p>
+
+                <p>我再次抬眼看她，仍然看不太清晰。</p>
+
+                <p>我摸了摸眼睛。</p>
+
+                <p>真的是因为我近视太严重了吗？</p>
+
+                <!-- 03 -->
+                <div class="chapter">03</div>
+
+                <p>五月，我终于考完了试，填完了志愿，只待一本毕业证就能宣布毕业了。</p>
+
+                <p>不过班主任说毕业证还要等好一会儿，我这个假期将持续很长时间。</p>
+
+                <p>等收到新学校的录取通知书时，已经是九月的事情了。</p>
+
+                <p>只是，我的身边无人，我无法共享这份喜悦。</p>
+
+                <p>而且我似乎……也没有那么高兴了。</p>
+
+                <p>拿过快递员递过来的录取通知书，转身回家，我的嘴角慢慢耷拉下来。</p>
+
+                <p>我给我的姐姐发信息，她只问我有没有注意到贷款的信息。</p>
+
+                <p>我抿了抿嘴。</p>
+
+                <p>我当然知道这也很重要，可是……我的喜悦无人在意。</p>
+
+                <p>我也会伤心。</p>
+
+                <p>激动的心被浇了盆水，冷静了下来。</p>
+
+                <p>将这件事处理完，我将录取通知书往旁边一放，再也不管了。</p>
+
+                <p>恰在这时候，她再次来到我身边。</p>
+
+                <p>我立时揪住她的衣角，不自觉泪目。</p>
+
+                <p>——我好想她。</p>
+
+                <p>哪怕给了联系方式，可有些事不是文字就能表达的，我想和对方说，用直白的语言说。</p>
+
+                <p>说我的开心，说我的难过，说……我很想她。</p>
+
+                <p>我不知道她叫什么，也不知道她是谁，甚至她怎么来的又怎么走的，我也一概不知。</p>
+
+                <p>她只来过三次，我却已经如此依赖她，信任她。</p>
+
+                <p>这是……为什么呢？</p>
+
+                <p>我心里应是有答案的，但我下意识不愿承认。</p>
+
+                <p>这一次她待的时间比上一次长了点，她就这么听着我絮絮叨叨，时而摸摸我的脑袋，或伸手与我拥抱。</p>
+
+                <p>我从未在某一刻如此在意血缘关系。</p>
+
+                <p>哪怕我有两个相识许久的朋友，我们也终究没有血缘关系，终究还有着一层隔阂。</p>
+
+                <p>我不懂那是什么东西，但在有些时候，在需要某些人帮助的时候，我就是不会选择她们。</p>
+
+                <p class="dialogue">"这一次你能不走了吗？"话到最后，我忐忑地问出这句话。</p>
+
+                <p>她的笑掺杂了些别样的情感，安慰似的摸了摸我的头："我会尽量多来几次的。"</p>
+
+                <p class="dialogue">"我不懂……"大多数情况下我都很直白，可是将要问出口的疑惑被她制止了，她欲言又止，最终只是从不知道哪里掏出一些瓶瓶罐罐，开始教我护肤。</p>
+
+                <p>我本来很嫌麻烦，却渐渐养成了习惯——她的话好似带着魔力，只是轻飘飘一两句，我就记住并且如实照做了。</p>
+
+                <!-- 04 -->
+                <div class="chapter">04</div>
+
+                <p>我进了大学。</p>
+
+                <p>在考试的时候我也来过一次，当时绕圈子绕了好多次也没找明白考试地点，我望着校门口的牌匾，心里想着曾经走不明白的路，如今要用四年去熟悉了。</p>
+
+                <p>大学的生活很不一样，相同的是，我再次陷入社交焦虑，我很难控制自己去与人交涉，很难有那等勇气去问哪怕一句话。</p>
+
+                <p>甚至就算我睡在阳台门的旁边，从床铺到厕所的路竟也如此的远……仿佛一切都没有变，我又一次站在了被人审视的舞台上，颤颤巍巍走着遥远的路，生怕行差踏错，被万人所指。</p>
+
+                <p>在国庆假期，所有人都回家之时，某一个早上，我正刷着短视频。</p>
+
+                <p>仅仅是一个评论，我就忽然泪崩。</p>
+
+                <p>我哭了有很久，有意识的录下了自己的哭声，我知道我在干什么，却不明白为何突然控制不住的流泪。</p>
+
+                <p>她又一次找到了我，将手机从我手中抽离，抱着我坐起身，像第一次见面那样将我拥入怀中，轻拍我的背。</p>
+
+                <p>我哽咽着与她说我的心中所想。</p>
+
+                <p>我说，世界上只有我一个人了，唯一和我有一点血缘关系的姐和我不算很熟，又有代沟。</p>
+
+                <p>我说，这个世界上好像没有一个能说这些话的了。</p>
+
+                <p>不再有人知道我从小长到大是什么模样，因为我没有同龄的兄弟姐妹。</p>
+
+                <p>她一句句的回应我，说没关系，有她在，她就是我最亲最亲的人。</p>
+
+                <p>她知道我从小到大的一切。</p>
+
+                <p>她明明在安慰我，可我却感觉到有水滴到了我的脸上。</p>
+
+                <p>我抬头，还不等我看清什么，她的手一伸将我的头按回怀里。</p>
+
+                <p>我不知这算不算害羞，只突然破涕而笑。</p>
+
+                <p>那一次她待的时间更长了，几乎陪了我一整天，那也是我国庆最开心最开心的一天，甚至可以说是我那一年最开心最开心的一天。</p>
+
+                <p>黄昏之时，她递给我一个信封和一包红纸。</p>
+
+                <p>她说，红纸是保佑符，至于这封信，要等我回到宿舍才能打开。</p>
+
+                <p>我心里顿时涌上不好的预感，我捉住她的袖子，慌张的问她是不是再也不会来了。</p>
+
+                <p>这种小说里的桥段我很熟悉，我怕它会照进现实……毕竟她的存在本身也很小说化。</p>
+
+                <p>她摇头否定，只说："曾经不给你是因为时机还没到，现今时机成熟，自然就有理由给你了。"</p>
+
+                <p class="dialogue">"别担心，我说了在就一定会在。"</p>
+
+                <p>我还是不安心，"那为什么我现在不能拆？"</p>
+
+                <p class="dialogue">"哪儿有人当面拆信的啊……"</p>
+
+                <p>我似乎看到了她的耳朵有些红。</p>
+
+                <p>是我的错觉吗？</p>
+
+                <!-- 05 -->
+                <div class="chapter">05</div>
+
+                <p>我拆开了信件，第一句话是"致亲爱的自己"，我的心中一跳，下意识屏住了呼吸。</p>
+
+                <p>其实我隐约猜测到了一点关于她身份的事情，只是一直不敢宣之于口。</p>
+
+                <p>我很难讲述这种"难以说出口"的感觉，就像有人在阻止我问那个问题。</p>
+
+                <p>但如今，这个问题答案，就在这封信里，我只觉这信忽然重了几分。</p>
+
+                <p>视线下移，我逐字逐句看完了信件内容，到最后竟再一次泪流满面。</p>
+
+                <p>我不由想到曾在书中看到的那句话——</p>
+
+                <div class="quote-line">"请你务必，一而再，再而三，三而不竭，千次万次，救自己于水火之中。"</div>
+
+                <p>她就是我，是未来的我。</p>
+
+                <p>她知道我知道的一切，所以以我最能接受的方式，来宽慰我。</p>
+
+                <p>她就是来拯救曾经迷茫的自己，为自己指点迷津，指明方向，为自己拭去眼泪，给自己信心与勇气。</p>
+
+                <p>不知何处吹来的秋叶落在了最后一句话上——</p>
+
+                <div class="quote-line">"亲爱的，影子会一直跟随着你，我也一样。千万别弄丢了自己呀，至少在这个世界上，在你不知道的角落，有这么一个我，而我，很爱很爱你。"</div>
+
+            </div>
+
+            <!-- ===== 底部（含返回） ===== -->
+            <div class="story-footer">
+                <span class="footer-end">✦ 完 ✦</span>
+                <a href="./index.html" class="footer-back">返回主页</a>
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+</html>
