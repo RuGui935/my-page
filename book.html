@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>文字书架 · 小说合集</title>
+    <style>
+        /* ===== 全局重置 — 继承自介游戏化风格 ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #1b1e2b;
+            background-image: radial-gradient(circle at 10% 30%, #2d3040 0%, #171a26 90%);
+            font-family: 'Segoe UI', system-ui, -apple-system, 'Helvetica Neue', sans-serif;
+            padding: 1.2rem 1rem 2.5rem;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #eaeef2;
+        }
+
+        /* ===== 主卡片 ===== */
+        .profile-card {
+            max-width: 700px;
+            width: 100%;
+            background: rgba(30, 34, 48, 0.7);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            border-radius: 48px 48px 32px 32px;
+            padding: 2rem 1.8rem 2.2rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 215, 150, 0.08);
+            border: 1px solid rgba(255, 215, 150, 0.15);
+            transition: all 0.2s ease;
+        }
+
+        /* ===== 返回按钮 ===== */
+        .back-bar {
+            margin-bottom: 1.2rem;
+        }
+        .back-btn {
+            display: inline-block;
+            background: rgba(60, 55, 70, 0.4);
+            border-radius: 40px;
+            padding: 0.3rem 1.4rem;
+            font-size: 0.85rem;
+            color: #d6ceb8;
+            text-decoration: none;
+            border: 1px solid #5a5a7a;
+            transition: 0.2s;
+            backdrop-filter: blur(2px);
+            letter-spacing: 0.3px;
+        }
+        .back-btn:hover {
+            background: #dbb594;
+            color: #1b1e2b;
+            border-color: #dbb594;
+            transform: translateX(-4px);
+        }
+        .back-btn::before {
+            content: "← ";
+        }
+
+        /* ===== 标题区 ===== */
+        .page-header {
+            text-align: center;
+            padding-bottom: 1.2rem;
+            border-bottom: 1px dashed rgba(255, 215, 150, 0.2);
+            margin-bottom: 1.6rem;
+        }
+        .page-header h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, #f7d8a8, #f0c08c);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            line-height: 1.3;
+        }
+        .page-header .subtitle {
+            font-size: 0.8rem;
+            color: #8a7e6e;
+            letter-spacing: 2px;
+            margin-top: 0.2rem;
+        }
+
+        /* ===== 书架分区 ===== */
+        .shelf-section {
+            margin-top: 1.8rem;
+            padding-top: 0.8rem;
+            border-top: 1px solid rgba(200, 180, 155, 0.1);
+        }
+        .shelf-section:first-of-type {
+            border-top: none;
+            margin-top: 0;
+            padding-top: 0;
+        }
+
+        .shelf-header {
+            display: flex;
+            align-items: baseline;
+            gap: 0.6rem;
+            margin-bottom: 0.6rem;
+            flex-wrap: wrap;
+        }
+        .shelf-header .shelf-name {
+            font-size: 1.3rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            color: #e2d4c0;
+        }
+        .shelf-header .shelf-badge {
+            font-size: 0.6rem;
+            background: #3b3f5a;
+            padding: 0.05rem 0.8rem;
+            border-radius: 30px;
+            color: #bdb6a2;
+            border: 1px solid #585c78;
+            letter-spacing: 0.5px;
+        }
+        .shelf-header .shelf-desc {
+            font-size: 0.75rem;
+            color: #8a7e6e;
+            margin-left: auto;
+            font-style: italic;
+        }
+
+        /* ===== 书籍列表 ===== */
+        .book-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+            padding-left: 0.6rem;
+        }
+        .book-item {
+            display: flex;
+            align-items: baseline;
+            gap: 0.4rem 0.8rem;
+            flex-wrap: wrap;
+            padding: 0.15rem 0;
+            font-size: 0.95rem;
+            color: #d6d2c4;
+            border-bottom: 1px solid rgba(200, 180, 155, 0.05);
+        }
+        .book-item .book-title {
+            font-weight: 400;
+            color: #e6dccc;
+        }
+        .book-item .book-author {
+            font-size: 0.75rem;
+            color: #8a7e6e;
+        }
+        .book-item .book-tag {
+            font-size: 0.6rem;
+            background: #2b2f44;
+            padding: 0 0.6rem;
+            border-radius: 30px;
+            color: #bdb6a2;
+            border: 1px solid #4f5270;
+        }
+        .book-item .book-note {
+            font-size: 0.7rem;
+            color: #7a6e5e;
+            font-style: italic;
+        }
+
+        /* ===== 空状态占位 ===== */
+        .empty-placeholder {
+            color: #5a4e3e;
+            font-size: 0.85rem;
+            padding: 0.4rem 0 0.4rem 0.6rem;
+            font-style: italic;
+            letter-spacing: 0.5px;
+        }
+
+        /* ===== 底部 ===== */
+        .page-footer {
+            margin-top: 2.2rem;
+            padding-top: 1.2rem;
+            border-top: 1px dashed rgba(255, 215, 150, 0.1);
+            text-align: center;
+        }
+        .page-footer .footer-back {
+            display: inline-block;
+            background: rgba(60, 55, 70, 0.4);
+            border-radius: 40px;
+            padding: 0.3rem 1.6rem;
+            font-size: 0.85rem;
+            color: #d6ceb8;
+            text-decoration: none;
+            border: 1px solid #5a5a7a;
+            transition: 0.2s;
+            backdrop-filter: blur(2px);
+        }
+        .page-footer .footer-back:hover {
+            background: #dbb594;
+            color: #1b1e2b;
+            border-color: #dbb594;
+            transform: translateX(-4px);
+        }
+        .page-footer .footer-back::before {
+            content: "← ";
+        }
+        .page-footer .footer-end {
+            display: block;
+            font-size: 0.7rem;
+            color: #5a4e3e;
+            letter-spacing: 3px;
+            margin-bottom: 0.4rem;
+        }
+
+        /* ===== 响应式 ===== */
+        @media (max-width: 480px) {
+            body {
+                padding: 0.8rem 0.6rem 1.8rem;
+            }
+            .profile-card {
+                padding: 1.5rem 1rem 1.8rem;
+                border-radius: 32px 32px 24px 24px;
+            }
+            .page-header h1 {
+                font-size: 1.6rem;
+            }
+            .shelf-header .shelf-name {
+                font-size: 1.1rem;
+            }
+            .book-item {
+                font-size: 0.88rem;
+                gap: 0.2rem 0.5rem;
+            }
+            .back-btn {
+                font-size: 0.75rem;
+                padding: 0.2rem 1rem;
+            }
+            .page-footer .footer-back {
+                font-size: 0.75rem;
+                padding: 0.2rem 1.2rem;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .profile-card {
+                padding: 1rem 0.8rem 1.4rem;
+                border-radius: 24px;
+            }
+            .page-header h1 {
+                font-size: 1.3rem;
+            }
+            .book-item {
+                font-size: 0.82rem;
+            }
+            .shelf-header .shelf-name {
+                font-size: 1rem;
+            }
+        }
+
+        /* ===== 底部按钮组 ===== */
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+            margin-top: 0.2rem;
+        }
+        .footer-back, .footer-top {
+            display: inline-block;
+            background: rgba(60, 55, 70, 0.4);
+            border-radius: 40px;
+            padding: 0.3rem 1.6rem;
+            font-size: 0.85rem;
+            color: #d6ceb8;
+            text-decoration: none;
+            border: 1px solid #5a5a7a;
+            transition: 0.2s;
+            backdrop-filter: blur(2px);
+        }
+        .footer-back:hover, .footer-top:hover {
+            background: #dbb594;
+            color: #1b1e2b;
+            border-color: #dbb594;
+            transform: translateX(-4px);
+        }
+        .footer-back::before {
+            content: "← ";
+        }
+        .footer-top::after {
+            content: " ↑";
+        }
+        @media (max-width: 480px) {
+            .footer-back, .footer-top {
+                font-size: 0.75rem;
+                padding: 0.2rem 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="profile-card">
+
+        <!-- ===== 顶部返回 ===== -->
+        <div class="back-bar">
+            <a href="javascript:history.back()" class="back-btn">返回主页</a>
+        </div>
+
+        <!-- ===== 标题 ===== -->
+        <div class="page-header">
+            <h1>📚 文字书架</h1>
+            <p class="subtitle">—— 小说阅读记录</p>
+        </div>
+
+        <!-- ============================================================ -->
+        <!-- 分区一：云中书（正在看的小说） -->
+        <!-- ============================================================ -->
+        <div class="shelf-section">
+            <div class="shelf-header">
+                <span class="shelf-name">☁️ 云中书</span>
+                <span class="shelf-badge">在读</span>
+                <span class="shelf-desc">正在看 · 追更</span>
+            </div>
+            <div class="book-list">
+                <!-- 示例条目，后续可替换/追加 -->
+                <div class="book-item">
+                    <span class="book-title">《以下犯上》</span>
+                    <span class="book-author">桑鲤</span>
+                    <span class="book-tag">GL</span>
+                    <span class="book-tag">架空</span>
+                    <span class="book-tag">江湖</span>
+                    <span class="book-note">追更中</span>
+                </div>
+                <!-- <div class="book-item">
+                    <span class="book-title">《另一本在读》</span>
+                    <span class="book-author">作者名</span>
+                    <span class="book-tag">GL</span>
+                </div> -->
+                <!-- 空状态占位（无内容时显示，有内容后可删除） -->
+                <div class="empty-placeholder">— 在这里添加正在读的小说 —</div>
+            </div>
+        </div>
+
+        <!-- ============================================================ -->
+        <!-- 分区二：朱砂册（看完了很喜欢的小说） -->
+        <!-- ============================================================ -->
+        <div class="shelf-section">
+            <div class="shelf-header">
+                <span class="shelf-name">❤️ 朱砂册</span>
+                <span class="shelf-badge">挚爱</span>
+                <span class="shelf-desc">阅毕 · 心头好</span>
+            </div>
+            <div class="book-list">
+                <div class="book-item">
+                    <span class="book-title">《阴缘结》</span>
+                    <span class="book-author">桑鲤</span>
+                    <span class="book-tag">GL</span>
+                    <span class="book-tag">古风</span>
+                    <span class="book-note">二刷预定</span>
+                </div>
+                <div class="book-item">
+                    <span class="book-title">《若相离》</span>
+                    <span class="book-author">晓梦霜天</span>
+                    <span class="book-tag">GL</span>
+                    <span class="book-tag">古风</span>
+                    <span class="book-tag">权谋</span>
+                </div>
+                <div class="book-item">
+                    <span class="book-title">《凰兮从我栖》</span>
+                    <span class="book-author">从我栖</span>
+                    <span class="book-tag">GL</span>
+                    <span class="book-tag">古风</span>
+                    <span class="book-tag">权谋</span>
+                </div>
+                <div class="book-item">
+                    <span class="book-title">《刺墓》</span>
+                    <span class="book-author">肥宅快乐兽</span>
+                    <span class="book-tag">GL</span>
+                    <span class="book-tag">古风</span>
+                    <span class="book-tag">盗墓</span>
+                </div>
+                <div class="book-item">
+                    <span class="book-title">《她怒》</span>
+                    <span class="book-author">今又雨</span>
+                    <span class="book-tag">无CP</span>
+                    <span class="book-tag">悬疑</span>
+                </div>
+                <div class="book-item">
+                    <span class="book-title">《让我寄生一下》</span>
+                    <span class="book-author">别山去</span>
+                    <span class="book-tag">无CP</span>
+                    <span class="book-tag">架空</span>
+                </div>
+                <div class="empty-placeholder">— 存放让你心动的故事 —</div>
+            </div>
+        </div>
+
+        <!-- ============================================================ -->
+        <!-- 分区三：清简集（看完了觉得一般/还行的小说） -->
+        <!-- ============================================================ -->
+        <div class="shelf-section">
+            <div class="shelf-header">
+                <span class="shelf-name">📖 清简集</span>
+                <span class="shelf-badge">泛读</span>
+                <span class="shelf-desc">阅毕 · 还行</span>
+            </div>
+            <div class="book-list">
+                <div class="book-item">
+                    <span class="book-title">《不如来碗孟婆汤》</span>
+                    <span class="book-author">风月泊</span>
+                    <span class="book-tag">三星</span>
+                </div>
+                <div class="book-item">
+                    <span class="book-title">《程序媛脱单计划》</span>
+                    <span class="book-author">沐枫轻年</span>
+                    <span class="book-tag">三星半</span>
+                </div>
+                <div class="book-item">
+                    <span class="book-title">《殊途》</span>
+                    <span class="book-author">沐枫轻年</span>
+                    <span class="book-tag">三星</span>
+                </div>
+                <div class="empty-placeholder">— 记录那些平淡的阅读时光 —</div>
+            </div>
+        </div>
+
+        <!-- ============================================================ -->
+        <!-- 分区四：衍生卷（同人文专区） -->
+        <!-- ============================================================ -->
+        <div class="shelf-section">
+            <div class="shelf-header">
+                <span class="shelf-name">🌀 衍生卷</span>
+                <span class="shelf-badge">同人</span>
+                <span class="shelf-desc">阅毕 · 衍生故事</span>
+            </div>
+            <div class="book-list">
+                <div class="book-item">
+                    <span class="book-title">《麻辣女兵同人 我为守护而来》</span>
+                    <span class="book-author">慕容潇鷽</span>
+                    <span class="book-tag">原作：麻辣女兵</span>
+                </div>
+                <div class="book-item">
+                    <span class="book-title">《穿越之生死战，生死情》</span>
+                    <span class="book-author">田野若溪</span>
+                    <span class="book-tag">原作：铁血使命</span>
+                </div>
+                <div class="empty-placeholder">— 存放二次创作的快乐 —</div>
+            </div>
+        </div>
+
+        <!-- ===== 底部 ===== -->
+        <div class="page-footer">
+            <span class="footer-end">✦ 持续更新 ✦</span>
+            <div class="footer-links">
+                <a href="./index.html" class="footer-back">返回主页</a>
+                <a href="#" class="footer-top" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">返回顶部</a>
+            </div>
+        </div>
+
+</body>
+</html>
