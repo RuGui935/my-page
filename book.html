@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
     <title>文字书架 · 小说合集</title>
     <style>
-        /* ===== 全局重置 — 继承自介游戏化风格 ===== */
+        /* ===== 全局重置 ===== */
         * {
             margin: 0;
             padding: 0;
@@ -24,7 +24,6 @@
             color: #eaeef2;
         }
 
-        /* ===== 主卡片 ===== */
         .profile-card {
             max-width: 700px;
             width: 100%;
@@ -35,13 +34,9 @@
             padding: 2rem 1.8rem 2.2rem;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 215, 150, 0.08);
             border: 1px solid rgba(255, 215, 150, 0.15);
-            transition: all 0.2s ease;
         }
 
-        /* ===== 返回按钮 ===== */
-        .back-bar {
-            margin-bottom: 1.2rem;
-        }
+        .back-bar { margin-bottom: 1.2rem; }
         .back-btn {
             display: inline-block;
             background: rgba(60, 55, 70, 0.4);
@@ -61,11 +56,8 @@
             border-color: #dbb594;
             transform: translateX(-4px);
         }
-        .back-btn::before {
-            content: "← ";
-        }
+        .back-btn::before { content: "← "; }
 
-        /* ===== 标题区 ===== */
         .page-header {
             text-align: center;
             padding-bottom: 1.2rem;
@@ -130,33 +122,94 @@
             font-style: italic;
         }
 
+        /* ===== 分类折叠面板 ===== */
+        .category-group {
+            margin-top: 0.6rem;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 215, 150, 0.06);
+            display: none; /* 默认全部隐藏 */
+        }
+        .category-group.active {
+            display: block; /* 激活的显示 */
+        }
+        .category-group + .category-group {
+            margin-top: 0.4rem;
+        }
+
+        .category-toggle {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.3rem 0.8rem 0.3rem 1rem;
+            background: rgba(20, 22, 35, 0.4);
+            cursor: pointer;
+            user-select: none;
+            transition: 0.2s;
+            border-bottom: 1px solid transparent;
+        }
+        .category-toggle:hover {
+            background: rgba(40, 44, 65, 0.5);
+        }
+        .category-toggle .cat-name {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #d6ceb8;
+        }
+        .category-toggle .cat-count {
+            font-size: 0.6rem;
+            color: #6a5e4e;
+            background: #2b2f44;
+            padding: 0 0.6rem;
+            border-radius: 30px;
+            border: 1px solid #4f5270;
+        }
+        .category-toggle .cat-arrow {
+            margin-left: auto;
+            color: #6a5e4e;
+            font-size: 0.7rem;
+            transition: transform 0.3s ease;
+        }
+        .category-toggle .cat-arrow.open {
+            transform: rotate(90deg);
+        }
+
+        /* 书籍列表（默认展开） */
+        .category-content {
+            padding: 0.2rem 0 0.2rem 0.8rem;
+            background: rgba(0, 0, 0, 0.15);
+            border-top: 1px solid rgba(255, 215, 150, 0.04);
+        }
+        .category-content .book-list {
+            padding-left: 0.2rem;
+        }
+
         /* ===== 书籍列表 ===== */
         .book-list {
             display: flex;
             flex-direction: column;
-            gap: 0.3rem;
-            padding-left: 0.6rem;
+            gap: 0.15rem;
         }
         .book-item {
             display: flex;
             align-items: baseline;
             gap: 0.4rem 0.8rem;
             flex-wrap: wrap;
-            padding: 0.15rem 0;
-            font-size: 0.95rem;
+            padding: 0.1rem 0;
+            font-size: 0.92rem;
             color: #d6d2c4;
-            border-bottom: 1px solid rgba(200, 180, 155, 0.05);
+            border-bottom: 1px solid rgba(200, 180, 155, 0.04);
         }
         .book-item .book-title {
             font-weight: 400;
             color: #e6dccc;
         }
         .book-item .book-author {
-            font-size: 0.75rem;
+            font-size: 0.72rem;
             color: #8a7e6e;
         }
         .book-item .book-tag {
-            font-size: 0.6rem;
+            font-size: 0.55rem;
             background: #2b2f44;
             padding: 0 0.6rem;
             border-radius: 30px;
@@ -164,18 +217,24 @@
             border: 1px solid #4f5270;
         }
         .book-item .book-note {
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             color: #7a6e5e;
             font-style: italic;
         }
 
-        /* ===== 空状态占位 ===== */
+        /* ===== 空状态 ===== */
         .empty-placeholder {
             color: #5a4e3e;
-            font-size: 0.85rem;
-            padding: 0.4rem 0 0.4rem 0.6rem;
+            font-size: 0.8rem;
+            padding: 0.2rem 0 0.2rem 0.4rem;
             font-style: italic;
             letter-spacing: 0.5px;
+        }
+        .category-empty {
+            color: #4a3e2e;
+            font-size: 0.75rem;
+            padding: 0.3rem 0 0.3rem 0.4rem;
+            font-style: italic;
         }
 
         /* ===== 底部 ===== */
@@ -185,81 +244,6 @@
             border-top: 1px dashed rgba(255, 215, 150, 0.1);
             text-align: center;
         }
-        .page-footer .footer-back {
-            display: inline-block;
-            background: rgba(60, 55, 70, 0.4);
-            border-radius: 40px;
-            padding: 0.3rem 1.6rem;
-            font-size: 0.85rem;
-            color: #d6ceb8;
-            text-decoration: none;
-            border: 1px solid #5a5a7a;
-            transition: 0.2s;
-            backdrop-filter: blur(2px);
-        }
-        .page-footer .footer-back:hover {
-            background: #dbb594;
-            color: #1b1e2b;
-            border-color: #dbb594;
-            transform: translateX(-4px);
-        }
-        .page-footer .footer-back::before {
-            content: "← ";
-        }
-        .page-footer .footer-end {
-            display: block;
-            font-size: 0.7rem;
-            color: #5a4e3e;
-            letter-spacing: 3px;
-            margin-bottom: 0.4rem;
-        }
-
-        /* ===== 响应式 ===== */
-        @media (max-width: 480px) {
-            body {
-                padding: 0.8rem 0.6rem 1.8rem;
-            }
-            .profile-card {
-                padding: 1.5rem 1rem 1.8rem;
-                border-radius: 32px 32px 24px 24px;
-            }
-            .page-header h1 {
-                font-size: 1.6rem;
-            }
-            .shelf-header .shelf-name {
-                font-size: 1.1rem;
-            }
-            .book-item {
-                font-size: 0.88rem;
-                gap: 0.2rem 0.5rem;
-            }
-            .back-btn {
-                font-size: 0.75rem;
-                padding: 0.2rem 1rem;
-            }
-            .page-footer .footer-back {
-                font-size: 0.75rem;
-                padding: 0.2rem 1.2rem;
-            }
-        }
-
-        @media (max-width: 380px) {
-            .profile-card {
-                padding: 1rem 0.8rem 1.4rem;
-                border-radius: 24px;
-            }
-            .page-header h1 {
-                font-size: 1.3rem;
-            }
-            .book-item {
-                font-size: 0.82rem;
-            }
-            .shelf-header .shelf-name {
-                font-size: 1rem;
-            }
-        }
-
-        /* ===== 底部按钮组 ===== */
         .footer-links {
             display: flex;
             justify-content: center;
@@ -285,219 +269,485 @@
             border-color: #dbb594;
             transform: translateX(-4px);
         }
-        .footer-back::before {
-            content: "← ";
+        .footer-back::before { content: "← "; }
+        .footer-top::after { content: " ↑"; }
+        .footer-end {
+            display: block;
+            font-size: 0.7rem;
+            color: #5a4e3e;
+            letter-spacing: 3px;
+            margin-bottom: 0.4rem;
         }
-        .footer-top::after {
-            content: " ↑";
-        }
+
+        /* ===== 响应式 ===== */
         @media (max-width: 480px) {
-            .footer-back, .footer-top {
-                font-size: 0.75rem;
-                padding: 0.2rem 1.2rem;
-            }
+            body { padding: 0.8rem 0.6rem 1.8rem; }
+            .profile-card { padding: 1.5rem 1rem 1.8rem; border-radius: 32px 32px 24px 24px; }
+            .page-header h1 { font-size: 1.6rem; }
+            .shelf-header .shelf-name { font-size: 1.1rem; }
+            .book-item { font-size: 0.85rem; gap: 0.2rem 0.4rem; }
+            .back-btn, .footer-back, .footer-top { font-size: 0.75rem; padding: 0.2rem 1rem; }
+            .category-toggle { padding: 0.25rem 0.6rem 0.25rem 0.8rem; }
+            .category-toggle .cat-name { font-size: 0.8rem; }
+            .category-content { padding-left: 0.4rem; }
+        }
+        @media (max-width: 380px) {
+            .profile-card { padding: 1rem 0.8rem 1.4rem; border-radius: 24px; }
+            .page-header h1 { font-size: 1.3rem; }
+            .book-item { font-size: 0.8rem; }
+            .shelf-header .shelf-name { font-size: 1rem; }
+        }
+
+        /* 分类标签组 (显示在书架头部下方) */
+        .category-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.3rem 0.5rem;
+            margin-bottom: 0.6rem;
+            padding-left: 0.2rem;
+        }
+        .category-tabs .cat-tab {
+            font-size: 0.65rem;
+            background: #2b2f44;
+            padding: 0.05rem 0.8rem;
+            border-radius: 30px;
+            color: #bdb6a2;
+            border: 1px solid #4f5270;
+            cursor: pointer;
+            transition: 0.15s;
+        }
+        .category-tabs .cat-tab:hover {
+            background: #3b3f5a;
+            color: #e6dccc;
+            border-color: #6a6e8a;
+        }
+        .category-tabs .cat-tab.active {
+            background: #4b3f5e;
+            border-color: #b2967a;
+            color: #f0e3d0;
         }
     </style>
 </head>
 <body>
 
-    <div class="profile-card">
+<div class="profile-card">
 
-        <!-- ===== 顶部返回 ===== -->
-        <div class="back-bar">
-            <a href="javascript:history.back()" class="back-btn">返回主页</a>
+    <!-- ===== 顶部返回 ===== -->
+    <div class="back-bar">
+        <a href="javascript:history.back()" class="back-btn">返回主页</a>
+    </div>
+
+    <!-- ===== 标题 ===== -->
+    <div class="page-header">
+        <h1>📚 文字书架</h1>
+        <p class="subtitle">—— 小说阅读记录</p>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- 分区一：云中书（正在看的小说） -->
+    <!-- ============================================================ -->
+    <div class="shelf-section">
+        <div class="shelf-header">
+            <span class="shelf-name">☁️ 云中书</span>
+            <span class="shelf-badge">在读</span>
+            <span class="shelf-desc">正在看 · 追更</span>
         </div>
-
-        <!-- ===== 标题 ===== -->
-        <div class="page-header">
-            <h1>📚 文字书架</h1>
-            <p class="subtitle">—— 小说阅读记录</p>
-        </div>
-
-        <!-- ============================================================ -->
-        <!-- 分区一：云中书（正在看的小说） -->
-        <!-- ============================================================ -->
-        <div class="shelf-section">
-            <div class="shelf-header">
-                <span class="shelf-name">☁️ 云中书</span>
-                <span class="shelf-badge">在读</span>
-                <span class="shelf-desc">正在看 · 追更</span>
+        <div class="book-list">
+            <div class="book-item">
+                <span class="book-title">《以下克上》</span>
+                <span class="book-author">桑鲤</span>
+                <span class="book-tag">GL · 架空江湖</span>
+                <span class="book-note">追更中</span>
             </div>
-            <div class="book-list">
-                <!-- 示例条目，后续可替换/追加 -->
-                <div class="book-item">
-                    <span class="book-title">《以下犯上》</span>
-                    <span class="book-author">桑鲤</span>
-                    <span class="book-tag">GL · 架空江湖</span>
-                    <span class="book-note">追更中</span>
-                </div>
-                <!-- <div class="book-item">
-                    <span class="book-title">《另一本在读》</span>
-                    <span class="book-author">作者名</span>
-                    <span class="book-tag">GL</span>
-                </div> -->
-                <!-- 空状态占位（无内容时显示，有内容后可删除） -->
-                <div class="empty-placeholder">— 正在读的小说 —</div>
+            <div class="book-item">
+                <span class="book-title">《前任成为房东之后》</span>
+                <span class="book-author">海哪吒</span>
+                <span class="book-tag">GL · 现代都市</span>
             </div>
         </div>
+    </div>
 
-        <!-- ============================================================ -->
-        <!-- 分区二：朱砂册（看完了很喜欢的小说） -->
-        <!-- ============================================================ -->
-        <div class="shelf-section">
-            <div class="shelf-header">
-                <span class="shelf-name">❤️ 朱砂册</span>
-                <span class="shelf-badge">挚爱</span>
-                <span class="shelf-desc">阅毕 · 心头好</span>
+    <!-- ============================================================ -->
+    <!-- 分区二：朱砂册（看完了很喜欢的小说）+ 分类 -->
+    <!-- ============================================================ -->
+    <div class="shelf-section">
+        <div class="shelf-header">
+            <span class="shelf-name">❤️ 朱砂册</span>
+            <span class="shelf-badge">挚爱</span>
+            <span class="shelf-desc">阅毕 · 心头好</span>
+        </div>
+
+        <!-- 分类标签导航 -->
+        <div class="category-tabs" id="zhusha-tabs">
+            <span class="cat-tab active" data-target="zhusha-all">全部</span>
+            <span class="cat-tab" data-target="zhusha-gufeng">古风</span>
+            <span class="cat-tab" data-target="zhusha-xiandai">现代</span>
+            <span class="cat-tab" data-target="zhusha-moshi">末世</span>
+            <span class="cat-tab" data-target="zhusha-wuxianliu">无限流</span>
+            <span class="cat-tab" data-target="zhusha-kuaichuan">快穿</span>
+            <span class="cat-tab" data-target="zhusha-jiakong">架空</span>
+            <span class="cat-tab" data-target="zhusha-xuanhuan">玄幻</span>
+        </div>
+
+        <!-- 全部（默认显示） -->
+        <div class="category-group active" data-category="zhusha-all">
+            <div class="category-toggle" onclick="toggleCategory(this)">
+                <span class="cat-name">📌 全部</span>
+                <span class="cat-count">16 本</span>
+                <span class="cat-arrow open">▶</span>
             </div>
-            <div class="book-list">
-                <div class="book-item">
-                    <span class="book-title">《阴缘结》</span>
-                    <span class="book-author">桑鲤</span>
-                    <span class="book-tag">GL · 古风</span>
-                    <span class="book-note">二刷预定</span>
+            <div class="category-content">
+                <div class="book-list">
+                    <div class="book-item"><span class="book-title">《阴缘结》</span><span class="book-author">桑鲤</span><span class="book-tag">GL · 古风</span><span class="book-note">二刷预定</span></div>
+                    <div class="book-item"><span class="book-title">《若相离》</span><span class="book-author">晓梦霜天</span><span class="book-tag">GL · 古风权谋</span></div>
+                    <div class="book-item"><span class="book-title">《凰兮从我栖》系列</span><span class="book-author">从我栖</span><span class="book-tag">GL · 古风权谋</span></div>
+                    <div class="book-item"><span class="book-title">《刺墓》系列</span><span class="book-author">肥宅快乐兽</span><span class="book-tag">GL · 古风盗墓</span></div>
+                    <div class="book-item"><span class="book-title">《她怒》</span><span class="book-author">今又雨</span><span class="book-tag">无CP · 悬疑</span></div>
+                    <div class="book-item"><span class="book-title">《让我寄生一下》</span><span class="book-author">别山去</span><span class="book-tag">无CP · 架空</span></div>
+                    <div class="book-item"><span class="book-title">《诡仙》</span><span class="book-author">天在水</span><span class="book-tag">GL · 玄幻 · 仙侠群像 · 师徒</span></div>
+                    <div class="book-item"><span class="book-title">《卿本佳人，奈何做贼？》</span><span class="book-author">桑鲤</span><span class="book-tag">GL · 武侠群像</span></div>
+                    <div class="book-item"><span class="book-title">《问棺》</span><span class="book-author">七小皇叔</span><span class="book-tag">GL · 幻想</span></div>
+                    <div class="book-item"><span class="book-title">《晚星》</span><span class="book-author">桑鲤</span><span class="book-tag">GL · 现代校园</span></div>
+                    <div class="book-item"><span class="book-title">《灵祭》</span><span class="book-author">桑鲤</span><span class="book-tag">GL · 玄幻仙侠</span></div>
+                    <div class="book-item"><span class="book-title">《她的触手》</span><span class="book-author">柒殇祭</span><span class="book-tag">GL · 现代幻想</span></div>
+                    <div class="book-item"><span class="book-title">《跟着道侣有饭吃[重生]》</span><span class="book-author">秦朝雾</span><span class="book-tag">GL · 架空仙侠</span></div>
+                    <div class="book-item"><span class="book-title">《春如旧》</span><span class="book-author">若花辞树</span><span class="book-tag">GL · 古风权谋</span></div>
+                    <div class="book-item"><span class="book-title">《弃仙》</span><span class="book-author">沐枫轻年</span><span class="book-tag">GL · 玄幻 · 仙侠 · 师徒</span></div>
+                    <div class="book-item"><span class="book-title">《她属于我》</span><span class="book-author">妲婴</span><span class="book-tag">GL · 现代都市 · 先婚后爱</span></div>
                 </div>
-                <div class="book-item">
-                    <span class="book-title">《若相离》</span>
-                    <span class="book-author">晓梦霜天</span>
-                    <span class="book-tag">GL · 古风权谋</span>
-                </div>
-                <div class="book-item">
-                    <span class="book-title">《凰兮从我栖》系列</span>
-                    <span class="book-author">从我栖</span>
-                    <span class="book-tag">GL · 古风权谋</span>
-                </div>
-                <div class="book-item">
-                    <span class="book-title">《刺墓》系列</span>
-                    <span class="book-author">肥宅快乐兽</span>
-                    <span class="book-tag">GL · 古风盗墓</span>
-                </div>
-                <div class="book-item">
-                    <span class="book-title">《她怒》</span>
-                    <span class="book-author">今又雨</span>
-                    <span class="book-tag">无CP · 悬疑</span>
-                </div>
-                <div class="book-item">
-                    <span class="book-title">《让我寄生一下》</span>
-                    <span class="book-author">别山去</span>
-                    <span class="book-tag">无CP · 架空</span>
-                </div>
-                <div class="book-item">
-                    <span class="book-title">《诡仙》</span>
-                    <span class="book-author">天在水</span>
-                    <span class="book-tag">GL · 仙侠群像 · 师徒</span>
-                </div>
-                <div class="book-item">
-                    <span class="book-title">《卿本佳人，奈何做贼？》</span>
-                    <span class="book-author">桑鲤</span>
-                    <span class="book-tag">GL · 武侠群像</span>
-                </div>
-                <div class="book-item">
-                    <span class="book-title">《问棺》</span>
-                    <span class="book-author">七小皇叔</span>
-                    <span class="book-tag">GL · 幻想</span>
-                </div>
-                <div class="book-item">
-                    <span class="book-title">《晚星》</span>
-                    <span class="book-author">桑鲤</span>
-                    <span class="book-tag">GL · 现代校园</span>
-                </div>
-                <div class="book-item">
-                    <span class="book-title">《灵祭》</span>
-                    <span class="book-author">桑鲤</span>
-                    <span class="book-tag">GL · 玄幻仙侠</span>
-                </div>
-                <div class="book-item">
-                    <span class="book-title">《她的触手》</span>
-                    <span class="book-author">柒殇祭</span>
-                    <span class="book-tag">GL · 现代幻想</span>
-                </div>
-                <div class="book-item">
-                    <span class="book-title">《跟着道侣有饭吃[重生]》</span>
-                    <span class="book-author">秦朝雾</span>
-                    <span class="book-tag">GL · 架空仙侠</span>
-                </div>
-                <div class="book-item">
-                    <span class="book-title">《春如旧》</span>
-                    <span class="book-author">若花辞树</span>
-                    <span class="book-tag">GL · 古风权谋</span>
-                </div>
-                <div class="book-item">
-                    <span class="book-title">《弃仙》</span>
-                    <span class="book-author">沐枫轻年</span>
-                    <span class="book-tag">GL · 仙侠 · 师徒</span>
-                </div>
-                <div class="book-item">
-                    <span class="book-title">《她属于我》</span>
-                    <span class="book-author">妲婴</span>
-                    <span class="book-tag">GL · 现代都市 · 先婚后爱</span>
-                </div>
-
-                <div class="empty-placeholder">— 存放心动的故事 —</div>
             </div>
         </div>
 
-        <!-- ============================================================ -->
-        <!-- 分区三：清简集（看完了觉得一般/还行的小说） -->
-        <!-- ============================================================ -->
-        <div class="shelf-section">
-            <div class="shelf-header">
-                <span class="shelf-name">📖 清简集</span>
-                <span class="shelf-badge">泛读</span>
-                <span class="shelf-desc">阅毕 · 还行</span>
+        <!-- 古风 -->
+        <div class="category-group" data-category="zhusha-gufeng">
+            <div class="category-toggle" onclick="toggleCategory(this)">
+                <span class="cat-name">🏮 古风</span>
+                <span class="cat-count">7 本</span>
+                <span class="cat-arrow open">▶</span>
             </div>
-            <div class="book-list">
-                <div class="book-item">
-                    <span class="book-title">《不如来碗孟婆汤》</span>
-                    <span class="book-author">风月泊</span>
-                    <span class="book-tag">三星</span>
+            <div class="category-content">
+                <div class="book-list">
+                    <div class="book-item"><span class="book-title">《阴缘结》</span><span class="book-author">桑鲤</span><span class="book-tag">GL · 古风</span><span class="book-note">二刷预定</span></div>
+                    <div class="book-item"><span class="book-title">《若相离》</span><span class="book-author">晓梦霜天</span><span class="book-tag">GL · 古风权谋</span></div>
+                    <div class="book-item"><span class="book-title">《凰兮从我栖》系列</span><span class="book-author">从我栖</span><span class="book-tag">GL · 古风权谋</span></div>
+                    <div class="book-item"><span class="book-title">《刺墓》系列</span><span class="book-author">肥宅快乐兽</span><span class="book-tag">GL · 古风盗墓</span></div>
+                    <div class="book-item"><span class="book-title">《春如旧》</span><span class="book-author">若花辞树</span><span class="book-tag">GL · 古风权谋</span></div>
+                    <div class="book-item"><span class="book-title">《卿本佳人，奈何做贼？》</span><span class="book-author">桑鲤</span><span class="book-tag">GL · 武侠群像</span></div>
+                    <div class="book-item"><span class="book-title">《问棺》</span><span class="book-author">七小皇叔</span><span class="book-tag">GL · 幻想</span></div>
                 </div>
-                <div class="book-item">
-                    <span class="book-title">《程序媛脱单计划》</span>
-                    <span class="book-author">沐枫轻年</span>
-                    <span class="book-tag">三星半</span>
-                </div>
-                <div class="book-item">
-                    <span class="book-title">《殊途》</span>
-                    <span class="book-author">沐枫轻年</span>
-                    <span class="book-tag">三星</span>
-                </div>
-                <div class="empty-placeholder">— 记录那些平淡的阅读时光 —</div>
             </div>
         </div>
 
-        <!-- ============================================================ -->
-        <!-- 分区四：衍生卷（同人文专区） -->
-        <!-- ============================================================ -->
-        <div class="shelf-section">
-            <div class="shelf-header">
-                <span class="shelf-name">🌀 衍生卷</span>
-                <span class="shelf-badge">同人</span>
-                <span class="shelf-desc">阅毕 · 衍生故事</span>
+        <!-- 现代 -->
+        <div class="category-group" data-category="zhusha-xiandai">
+            <div class="category-toggle" onclick="toggleCategory(this)">
+                <span class="cat-name">🌆 现代</span>
+                <span class="cat-count">3 本</span>
+                <span class="cat-arrow open">▶</span>
             </div>
-            <div class="book-list">
-                <div class="book-item">
-                    <span class="book-title">《麻辣女兵同人 我为守护而来》</span>
-                    <span class="book-author">慕容潇鷽</span>
-                    <span class="book-tag">原作：麻辣女兵</span>
+            <div class="category-content">
+                <div class="book-list">
+                    <div class="book-item"><span class="book-title">《晚星》</span><span class="book-author">桑鲤</span><span class="book-tag">GL · 现代校园</span></div>
+                    <div class="book-item"><span class="book-title">《她的触手》</span><span class="book-author">柒殇祭</span><span class="book-tag">GL · 现代幻想</span></div>
+                    <div class="book-item"><span class="book-title">《她属于我》</span><span class="book-author">妲婴</span><span class="book-tag">GL · 现代都市 · 先婚后爱</span></div>
                 </div>
-                <div class="book-item">
-                    <span class="book-title">《穿越之生死战，生死情》</span>
-                    <span class="book-author">田野若溪</span>
-                    <span class="book-tag">原作：铁血使命</span>
-                </div>
-                <div class="empty-placeholder">— 存放二次创作的快乐 —</div>
             </div>
         </div>
 
-        <!-- ===== 底部 ===== -->
-        <div class="page-footer">
-            <span class="footer-end">✦ 持续更新 ✦</span>
-            <div class="footer-links">
-                <a href="./index.html" class="footer-back">返回主页</a>
-                <a href="#" class="footer-top" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">返回顶部</a>
+        <!-- 末世 -->
+        <div class="category-group" data-category="zhusha-moshi">
+            <div class="category-toggle" onclick="toggleCategory(this)">
+                <span class="cat-name">🧟 末世</span>
+                <span class="cat-count">0 本</span>
+                <span class="cat-arrow open">▶</span>
+            </div>
+            <div class="category-content">
+                <div class="category-empty">— 暂无末世分类作品 —</div>
             </div>
         </div>
+
+        <!-- 无限流 -->
+        <div class="category-group" data-category="zhusha-wuxianliu">
+            <div class="category-toggle" onclick="toggleCategory(this)">
+                <span class="cat-name">🌀 无限流</span>
+                <span class="cat-count">1 本</span>
+                <span class="cat-arrow open">▶</span>
+            </div>
+            <div class="category-content">
+                <div class="book-list">
+                    <div class="book-item"><span class="book-title">《女寝大逃亡[无限]》</span><span class="book-author">火茶</span><span class="book-tag">无CP</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 快穿 -->
+        <div class="category-group" data-category="zhusha-kuaichuan">
+            <div class="category-toggle" onclick="toggleCategory(this)">
+                <span class="cat-name">⚡ 快穿</span>
+                <span class="cat-count">0 本</span>
+                <span class="cat-arrow open">▶</span>
+            </div>
+            <div class="category-content">
+                <div class="category-empty">— 暂无快穿分类作品 —</div>
+            </div>
+        </div>
+
+        <!-- 架空 -->
+        <div class="category-group" data-category="zhusha-jiakong">
+            <div class="category-toggle" onclick="toggleCategory(this)">
+                <span class="cat-name">🌌 架空</span>
+                <span class="cat-count">1 本</span>
+                <span class="cat-arrow open">▶</span>
+            </div>
+            <div class="category-content">
+                <div class="book-list">
+                    <div class="book-item"><span class="book-title">《让我寄生一下》</span><span class="book-author">别山去</span><span class="book-tag">无CP · 架空</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 玄幻 -->
+        <div class="category-group" data-category="zhusha-xuanhuan">
+            <div class="category-toggle" onclick="toggleCategory(this)">
+                <span class="cat-name">✨ 玄幻</span>
+                <span class="cat-count">4 本</span>
+                <span class="cat-arrow open">▶</span>
+            </div>
+            <div class="category-content">
+                <div class="book-list">
+                    <div class="book-item"><span class="book-title">《诡仙》</span><span class="book-author">天在水</span><span class="book-tag">GL · 玄幻 · 仙侠群像 · 师徒</span></div>
+                    <div class="book-item"><span class="book-title">《灵祭》</span><span class="book-author">桑鲤</span><span class="book-tag">GL · 玄幻仙侠</span></div>
+                    <div class="book-item"><span class="book-title">《跟着道侣有饭吃[重生]》</span><span class="book-author">秦朝雾</span><span class="book-tag">GL · 架空仙侠</span></div>
+                    <div class="book-item"><span class="book-title">《弃仙》</span><span class="book-author">沐枫轻年</span><span class="book-tag">GL · 玄幻 · 仙侠 · 师徒</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- 分区三：清简集（看完了觉得一般/还行的小说）+ 分类 -->
+    <!-- ============================================================ -->
+    <div class="shelf-section">
+        <div class="shelf-header">
+            <span class="shelf-name">📖 清简集</span>
+            <span class="shelf-badge">泛读</span>
+            <span class="shelf-desc">阅毕 · 还行</span>
+        </div>
+
+        <!-- 分类标签导航 -->
+        <div class="category-tabs" id="qingjian-tabs">
+            <span class="cat-tab active" data-target="qingjian-all">全部</span>
+            <span class="cat-tab" data-target="qingjian-gufeng">古风</span>
+            <span class="cat-tab" data-target="qingjian-xiandai">现代</span>
+            <span class="cat-tab" data-target="qingjian-moshi">末世</span>
+            <span class="cat-tab" data-target="qingjian-wuxianliu">无限流</span>
+            <span class="cat-tab" data-target="qingjian-kuaichuan">快穿</span>
+            <span class="cat-tab" data-target="qingjian-jiakong">架空</span>
+            <span class="cat-tab" data-target="qingjian-xuanhuan">玄幻</span>
+        </div>
+
+        <!-- 全部（默认显示） -->
+        <div class="category-group active" data-category="qingjian-all">
+            <div class="category-toggle" onclick="toggleCategory(this)">
+                <span class="cat-name">📌 全部</span>
+                <span class="cat-count">3 本</span>
+                <span class="cat-arrow open">▶</span>
+            </div>
+            <div class="category-content">
+                <div class="book-list">
+                    <div class="book-item"><span class="book-title">《不如来碗孟婆汤》</span><span class="book-author">风月泊</span><span class="book-tag">三星</span></div>
+                    <div class="book-item"><span class="book-title">《程序媛脱单计划》</span><span class="book-author">沐枫轻年</span><span class="book-tag">三星半</span></div>
+                    <div class="book-item"><span class="book-title">《殊途》</span><span class="book-author">沐枫轻年</span><span class="book-tag">三星</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 古风 -->
+        <div class="category-group" data-category="qingjian-gufeng">
+            <div class="category-toggle" onclick="toggleCategory(this)">
+                <span class="cat-name">🏮 古风</span>
+                <span class="cat-count">0 本</span>
+                <span class="cat-arrow open">▶</span>
+            </div>
+            <div class="category-content">
+                <div class="category-empty">— 暂无古风分类作品 —</div>
+            </div>
+        </div>
+
+        <!-- 现代 -->
+        <div class="category-group" data-category="qingjian-xiandai">
+            <div class="category-toggle" onclick="toggleCategory(this)">
+                <span class="cat-name">🌆 现代</span>
+                <span class="cat-count">2 本</span>
+                <span class="cat-arrow open">▶</span>
+            </div>
+            <div class="category-content">
+                <div class="book-list">
+                    <div class="book-item"><span class="book-title">《程序媛脱单计划》</span><span class="book-author">沐枫轻年</span><span class="book-tag">三星半</span></div>
+                    <div class="book-item"><span class="book-title">《殊途》</span><span class="book-author">沐枫轻年</span><span class="book-tag">三星</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 末世 -->
+        <div class="category-group" data-category="qingjian-moshi">
+            <div class="category-toggle" onclick="toggleCategory(this)">
+                <span class="cat-name">🧟 末世</span>
+                <span class="cat-count">0 本</span>
+                <span class="cat-arrow open">▶</span>
+            </div>
+            <div class="category-content">
+                <div class="category-empty">— 暂无末世分类作品 —</div>
+            </div>
+        </div>
+
+        <!-- 无限流 -->
+        <div class="category-group" data-category="qingjian-wuxianliu">
+            <div class="category-toggle" onclick="toggleCategory(this)">
+                <span class="cat-name">🌀 无限流</span>
+                <span class="cat-count">0 本</span>
+                <span class="cat-arrow open">▶</span>
+            </div>
+            <div class="category-content">
+                <div class="category-empty">— 暂无无限流分类作品 —</div>
+            </div>
+        </div>
+
+        <!-- 快穿 -->
+        <div class="category-group" data-category="qingjian-kuaichuan">
+            <div class="category-toggle" onclick="toggleCategory(this)">
+                <span class="cat-name">⚡ 快穿</span>
+                <span class="cat-count">0 本</span>
+                <span class="cat-arrow open">▶</span>
+            </div>
+            <div class="category-content">
+                <div class="category-empty">— 暂无快穿分类作品 —</div>
+            </div>
+        </div>
+
+        <!-- 架空 -->
+        <div class="category-group" data-category="qingjian-jiakong">
+            <div class="category-toggle" onclick="toggleCategory(this)">
+                <span class="cat-name">🌌 架空</span>
+                <span class="cat-count">0 本</span>
+                <span class="cat-arrow open">▶</span>
+            </div>
+            <div class="category-content">
+                
+                <div class="category-empty">— 暂无架空分类作品 —</div>
+            </div>
+        </div>
+
+        <!-- 玄幻 -->
+        <div class="category-group" data-category="qingjian-xuanhuan">
+            <div class="category-toggle" onclick="toggleCategory(this)">
+                <span class="cat-name">✨ 玄幻</span>
+                <span class="cat-count">1 本</span>
+                <span class="cat-arrow open">▶</span>
+            </div>
+            <div class="category-content">
+                <div class="book-list">
+                    <div class="book-item"><span class="book-title">《不如来碗孟婆汤》</span><span class="book-author">风月泊</span><span class="book-tag">三星</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- 分区四：衍生卷（同人文专区） -->
+    <!-- ============================================================ -->
+    <div class="shelf-section">
+        <div class="shelf-header">
+            <span class="shelf-name">🌀 衍生卷</span>
+            <span class="shelf-badge">同人</span>
+            <span class="shelf-desc">阅毕 · 衍生故事</span>
+        </div>
+        <div class="book-list">
+            <div class="book-item">
+                <span class="book-title">《麻辣女兵同人 我为守护而来》</span>
+                <span class="book-author">慕容潇鷽</span>
+                <span class="book-tag">原作：麻辣女兵</span>
+            </div>
+            <div class="book-item">
+                <span class="book-title">《穿越之生死战，生死情》</span>
+                <span class="book-author">田野若溪</span>
+                <span class="book-tag">原作：铁血使命</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== 底部 ===== -->
+    <div class="page-footer">
+        <span class="footer-end">✦ 持续更新 ✦</span>
+        <div class="footer-links">
+            <a href="./index.html" class="footer-back">返回主页</a>
+            <a href="#" class="footer-top" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">返回顶部</a>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // ===== 分类折叠面板 =====
+    function toggleCategory(el) {
+        const content = el.nextElementSibling;
+        const arrow = el.querySelector('.cat-arrow');
+        if (content.style.display === 'none') {
+            content.style.display = 'block';
+            if (arrow) arrow.classList.add('open');
+        } else {
+            content.style.display = 'none';
+            if (arrow) arrow.classList.remove('open');
+        }
+    }
+
+    // ===== 分类标签筛选 =====
+    document.querySelectorAll('.category-tabs').forEach(tabContainer => {
+        const tabs = tabContainer.querySelectorAll('.cat-tab');
+        const parentSection = tabContainer.closest('.shelf-section');
+        const allGroups = parentSection.querySelectorAll('.category-group');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                // 切换标签激活状态
+                tabs.forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+
+                const target = this.dataset.target;
+
+                allGroups.forEach(group => {
+                    if (group.dataset.category === target) {
+                        group.classList.add('active');
+                        group.style.display = 'block';
+                        // 展开内容
+                        const content = group.querySelector('.category-content');
+                        const arrow = group.querySelector('.cat-arrow');
+                        if (content) content.style.display = 'block';
+                        if (arrow) arrow.classList.add('open');
+                    } else {
+                        group.classList.remove('active');
+                        group.style.display = 'none';
+                    }
+                });
+            });
+        });
+    });
+
+    // 默认只展开全部，其他隐藏
+    document.querySelectorAll('.category-group').forEach(group => {
+        if (group.dataset.category.endsWith('-all')) {
+            group.style.display = 'block';
+            group.classList.add('active');
+            const content = group.querySelector('.category-content');
+            const arrow = group.querySelector('.cat-arrow');
+            if (content) content.style.display = 'block';
+            if (arrow) arrow.classList.add('open');
+        } else {
+            group.style.display = 'none';
+            group.classList.remove('active');
+        }
+    });
+</script>
 
 </body>
 </html>
