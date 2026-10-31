@@ -1,0 +1,853 @@
+/* ===== 全局颜色与变量 ===== */
+:root {
+    --color-bg: #12161a;        /* 玄色底 */
+    --color-card: #1a2026;      /* 卡片底 */
+    --color-wood: #5a6e54;      /* 低饱和木绿 */
+    --color-wood-light: #7a9a6e;
+    --color-water: #3a5a6a;     /* 暗青蓝 */
+    --color-text: #d8d4c8;      /* 暖白文字 */
+    --color-text-muted: #8a8a7a;/* 次要文字 */
+    --color-border: rgba(255, 255, 255, 0.05);
+}
+
+/* ===== 极简顶部固定栏 ===== */
+.top-bar {
+    position: sticky;
+    top: 0;
+    padding: 1rem 1.5rem;
+    background: rgba(18, 22, 26, 0.85); /* 纯玄色半透明 */
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    z-index: 90;
+    display: flex;
+    align-items: baseline; /* 让文字底部对齐 */
+    gap: 0.6rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03); /* 极细微的边线 */
+    
+    width: 100%;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.top-bar h1 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--color-text);
+    letter-spacing: 1px;
+}
+
+.top-bar-subtitle {
+    font-size: 0.65rem;
+    color: var(--color-wood-light);
+    letter-spacing: 2px;
+    opacity: 0.7;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
+body {
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* 防止整个页面滚动，让内容区自己滚 */
+}
+
+/* ===== 主内容区 ===== */
+.app-container {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem 1rem 5rem 1rem; /* 底部留空给导航栏 */
+}
+
+.tab-content {
+    display: none;
+    animation: fadeIn 0.3s ease;
+}
+.tab-content.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== 卡片样式 ===== */
+.card {
+    background: linear-gradient(145deg, rgba(30, 36, 44, 0.8), rgba(20, 24, 30, 0.9));
+    border-radius: 20px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.05); /* 极细高光边 */
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2); /* 立体阴影 */
+    backdrop-filter: blur(10px);
+}
+
+.card h2 {
+    font-size: 1.2rem;
+    color: var(--color-wood-light);
+    margin-bottom: 0.8rem;
+    font-weight: 500;
+}
+
+.card p {
+    font-size: 0.95rem;
+    color: var(--color-text-muted);
+    line-height: 1.6;
+}
+
+/* ===== 底部一级导航 ===== */
+.bottom-tabs {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(26, 32, 38, 0.95);
+    backdrop-filter: blur(10px);
+    display: flex;
+    justify-content: space-around;
+    padding: 0.8rem 0 calc(0.8rem + env(safe-area-inset-bottom));
+    border-top: 1px solid var(--color-border);
+    z-index: 100;
+}
+
+.tab-btn {
+    background: none;
+    border: none;
+    color: var(--color-text-muted);
+    font-size: 1rem;
+    padding: 0.5rem 1.5rem;
+    border-radius: 20px;
+    transition: 0.2s;
+    cursor: pointer;
+}
+
+.tab-btn.active {
+    color: var(--color-wood-light);
+    background: rgba(90, 110, 84, 0.15);
+    font-weight: 600;
+}
+
+/* ===== 展示页的二级 Tab ===== */
+.sub-tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    overflow-x: auto;
+}
+
+.sub-tab-btn {
+    background: var(--color-card);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-muted);
+    padding: 0.4rem 1.2rem;
+    border-radius: 30px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: 0.2s;
+    white-space: nowrap;
+}
+
+.sub-tab-btn.active {
+    background: var(--color-water);
+    color: var(--color-text);
+    border-color: var(--color-water);
+}
+
+.sub-tab-content {
+    display: none;
+}
+.sub-tab-content.active {
+    display: block;
+    animation: fadeIn 0.3s ease;
+}
+
+/* ===== 书架列表样式 ===== */
+.book-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+.book-item {
+    padding-bottom: 0.8rem;
+    border-bottom: 1px solid var(--color-border);
+}
+.book-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+.book-title {
+    font-size: 1rem;
+    color: var(--color-text);
+    font-weight: 500;
+    margin-bottom: 0.3rem;
+}
+.book-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    align-items: center;
+}
+.book-meta .tag {
+    background: rgba(58, 90, 106, 0.3);
+    color: #a0c0d0;
+    padding: 0.1rem 0.5rem;
+    border-radius: 10px;
+    border: 1px solid rgba(58, 90, 106, 0.5);
+}
+.book-meta .status {
+    color: var(--color-wood-light);
+}
+.book-meta .rating {
+    color: #d4af37; /* 星星颜色 */
+    letter-spacing: 2px;
+}
+
+/* ===== 设计网格样式 ===== */
+.design-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.8rem;
+}
+@media (min-width: 600px) {
+    .design-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+.design-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+.design-item img {
+    width: 100%;
+    border-radius: 12px;
+    background: #2a3036;
+    object-fit: cover;
+    aspect-ratio: 3 / 4; /* 默认封面比例 */
+}
+/* 如果是头像，可以后续用 JS 加个 class 改成 1:1 */
+.design-title {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    display: flex;
+    justify-content: space-between;
+}
+.design-title span {
+    color: var(--color-wood);
+}
+
+/* ===== 管理员悬浮按钮 ===== */
+.admin-btn {
+    position: fixed;
+    bottom: 80px; /* 在底部导航栏上方 */
+    right: 20px;
+    background: var(--color-water);
+    color: #fff;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 30px;
+    font-size: 0.9rem;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    cursor: pointer;
+    z-index: 100;
+    display: none; /* 默认隐藏，根据登录状态显示 */
+}
+
+/* 登录后变成“退出” */
+.admin-btn.logged-in {
+    background: var(--color-card);
+    color: var(--color-text-muted);
+    border: 1px solid var(--color-border);
+}
+
+/* ===== 模态框（弹窗）样式 ===== */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+.modal.active {
+    display: flex;
+}
+
+.modal-content {
+    background: var(--color-card);
+    padding: 1.5rem;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 400px;
+    border: 1px solid var(--color-border);
+}
+
+.modal-content h3 {
+    margin-bottom: 1rem;
+    color: var(--color-wood-light);
+    font-weight: 500;
+}
+
+.modal-content input, .modal-content select, .modal-content textarea {
+    width: 100%;
+    padding: 0.8rem;
+    margin-bottom: 0.8rem;
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
+    border-radius: 10px;
+    outline: none;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.modal-actions button {
+    padding: 0.5rem 1.2rem;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+#login-cancel, #action-cancel {
+    background: transparent;
+    color: var(--color-text-muted);
+}
+#login-submit, #action-save {
+    background: var(--color-wood);
+    color: #fff;
+}
+
+/* ===== 悬浮添加按钮 ===== */
+#fab-container {
+    position: fixed;
+    /* 比底部导航栏高一点，且偏左一点，避免滑屏/点击冲突 */
+    bottom: 80px; 
+    right: 24px;
+    z-index: 100;
+    display: none; /* 默认隐藏，JS控制 */
+}
+.fab-btn {
+    width: 48px; /* 稍微缩小一点 */
+    height: 48px;
+    border-radius: 50%;
+    background: rgba(90, 110, 84, 0.85); /* 带透明度的木绿色 */
+    backdrop-filter: blur(4px);
+    color: white;
+    font-size: 24px;
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    cursor: pointer;
+    transition: 0.2s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.fab-btn:hover, .fab-btn:active {
+    background: var(--color-wood-light);
+    transform: scale(1.1);
+}
+
+/* 调整管理员按钮，放在左侧，刚好跟加号对称，不冲突 */
+.admin-btn {
+    bottom: 80px !important;
+    right: auto !important;
+    left: 24px !important; 
+    padding: 0.4rem 1rem !important;
+    font-size: 0.8rem !important;
+}
+
+/* ===== 列表里的操作按钮 ===== */
+.book-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+.book-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+.btn-small {
+    background: transparent;
+    border: 1px solid var(--color-border);
+    color: var(--color-text-muted);
+    padding: 0.1rem 0.5rem;
+    border-radius: 6px;
+    font-size: 0.7rem;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.btn-small:hover {
+    color: var(--color-text);
+    border-color: var(--color-wood);
+}
+.btn-small.delete:hover {
+    color: #ff8a8a;
+    border-color: #ff8a8a;
+}
+
+/* 解决弹窗输入框聚焦时的蓝色描边 */
+.modal-content input:focus, .modal-content select:focus, .modal-content textarea:focus {
+    border-color: var(--color-wood);
+}
+
+/* ===== 工具栏与排序 ===== */
+.shelf-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    padding: 0 0.5rem;
+}
+.sort-select {
+    background: var(--color-card);
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
+    padding: 0.3rem 0.6rem;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    outline: none;
+    cursor: pointer;
+}
+
+/* ===== 书架列表紧凑排版 ===== */
+.book-item {
+    padding: 0.8rem 0;
+    border-bottom: 1px solid var(--color-border);
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem; /* 行间距缩小 */
+}
+.book-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0.2rem;
+}
+.book-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.book-title-line {
+    display: flex;
+    align-items: baseline;
+    gap: 0.3rem;
+    flex-wrap: wrap;
+}
+.book-index {
+    font-family: monospace;
+    color: var(--color-wood-light);
+    font-size: 0.85rem;
+    font-weight: bold;
+}
+.book-title {
+    font-size: 0.95rem;
+    color: var(--color-text);
+    font-weight: 500;
+}
+.book-author {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+}
+
+/* 第二行：分类、状态、星级、标签全挤在一行 */
+.book-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.7rem;
+    flex-wrap: wrap; /* 如果实在太长，允许在极小屏幕折行 */
+}
+.cat-tag {
+    background: rgba(58, 90, 106, 0.3);
+    color: #a0c0d0;
+    padding: 0.05rem 0.4rem;
+    border-radius: 4px;
+    border: 1px solid rgba(58, 90, 106, 0.5);
+}
+.status {
+    color: var(--color-wood-light);
+}
+.rating {
+    color: #d4af37;
+    letter-spacing: 1px;
+    font-size: 0.75rem;
+}
+/* 小标签 */
+.mini-tag {
+    color: var(--color-text-muted);
+    background: rgba(255, 255, 255, 0.05);
+    padding: 0.05rem 0.35rem;
+    border-radius: 4px;
+}
+
+/* 操作按钮再缩小一点 */
+.btn-small {
+    padding: 0.1rem 0.4rem;
+    font-size: 0.65rem;
+}
+
+/* ===== 设计网格 ===== */
+.design-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.8rem;
+    margin-top: 1rem;
+}
+@media (min-width: 600px) {
+    .design-grid { grid-template-columns: repeat(3, 1fr); }
+}
+.design-item {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+/* 封面比例 */
+.design-img-box {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    background: var(--color-bg);
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+}
+/* 头像比例 */
+.design-img-box.avatar {
+    aspect-ratio: 1 / 1;
+}
+.design-img-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+.design-info {
+    font-size: 0.75rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+/* 设计上的操作按钮 (绝对定位在右上角) */
+.design-actions {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    display: flex;
+    gap: 4px;
+    opacity: 0; /* 默认隐藏 */
+    transition: 0.2s;
+}
+.design-item:hover .design-actions,
+.design-item:active .design-actions {
+    opacity: 1; /* 鼠标悬浮或手机点击时显示 */
+}
+.design-actions .btn-small {
+    background: rgba(0,0,0,0.7);
+    border: none;
+    padding: 0.2rem 0.4rem;
+}
+
+/* 设计分类按钮 */
+.design-cat-btn {
+    background: transparent;
+    border: none;
+    color: var(--color-text-muted);
+    padding: 0.4rem 1rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: 0.2s;
+}
+.design-cat-btn.active {
+    color: var(--color-wood-light);
+    border-bottom-color: var(--color-wood-light);
+}
+
+/* 各种尺寸的容器 */
+.design-img-box {
+    width: 100%;
+    background: var(--color-bg);
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+}
+.ratio-34 { aspect-ratio: 3 / 4; }
+.ratio-11 { aspect-ratio: 1 / 1; }
+.ratio-57 { aspect-ratio: 5 / 7; }
+.ratio-169 { aspect-ratio: 16 / 9; }
+
+/* ===== 个人主页通用排版组件 ===== */
+.info-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.card p {
+    line-height: 1.7;
+    color: var(--color-text);
+}
+
+/* 提示/备注框 */
+.note-box {
+    margin-top: 1rem;
+    padding: 0.8rem;
+    background: rgba(255, 255, 255, 0.03);
+    border-left: 3px solid var(--color-water);
+    border-radius: 0 8px 8px 0;
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+}
+
+/* 警告/雷点文字 */
+.warning-text {
+    font-size: 0.9rem;
+    color: #d8b4b4;
+    background: rgba(163, 74, 74, 0.1);
+    padding: 0.8rem;
+    border-radius: 8px;
+}
+
+/
+
+/* UP主标签列表 - 强制竖排 */
+.up-list {
+    display: flex !important;
+    flex-direction: column !important; /* 强制竖向排列 */
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+.up-list span {
+    display: block !important;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 0.5rem 0.8rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    border: 1px solid var(--color-border);
+    box-sizing: border-box;
+}
+
+/* ===== 我的/喜好 专用组件 ===== */
+
+/* 引言框 */
+.quote-box {
+    text-align: center;
+    font-style: italic;
+    color: var(--color-text-muted);
+    padding: 1.5rem 0;
+    font-size: 0.95rem;
+    letter-spacing: 1px;
+}
+
+/* 省流胶囊标签 */
+.quick-info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+}
+.quick-info span {
+    background: rgba(58, 90, 106, 0.2);
+    color: #a0c0d0;
+    padding: 0.2rem 0.8rem;
+    border-radius: 30px;
+    font-size: 0.75rem;
+    border: 1px solid rgba(58, 90, 106, 0.4);
+}
+
+/* 列表去乱码与排版 */
+.styled-list {
+    list-style: none;
+    padding-left: 0;
+}
+.styled-list > li {
+    position: relative;
+    padding-left: 1.2rem;
+    margin-bottom: 0.6rem;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: var(--color-text);
+}
+.styled-list > li::before {
+    content: ""; 
+    position: absolute;
+    left: 0;
+    top: 0.6rem; /* 调整上下位置 */
+    width: 5px;
+    height: 5px;
+    background-color: var(--color-wood-light); /* 用木绿色 */
+    border-radius: 50%; /* 变成圆点 */
+}
+
+/* 嵌套的小列表 (心水剧情) */
+.sub-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    margin-top: 0.4rem;
+    padding-left: 0.5rem;
+}
+.sub-list span {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    background: rgba(255, 255, 255, 0.03);
+    padding: 0.3rem 0.6rem;
+    border-radius: 6px;
+}
+
+/* 小说偏好的小圆角标签 */
+.small-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+}
+.small-tags span {
+    background: rgba(90, 110, 84, 0.15); /* 木色底 */
+    color: var(--color-wood-light);
+    font-size: 0.7rem; /* 字体调小 */
+    padding: 0.15rem 0.6rem;
+    border-radius: 20px; /* 圆角 */
+    border: 1px solid rgba(90, 110, 84, 0.3);
+}
+
+ul {
+    list-style: none !important;
+}
+
+/* ===== 修复爆掉的省流标签 ===== */
+.quick-info {
+    display: flex;
+    flex-wrap: wrap; /* 允许换行 */
+    gap: 0.6rem;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    width: 100%;
+}
+
+.quick-info span {
+    background: rgba(58, 90, 106, 0.2);
+    color: #a0c0d0;
+    padding: 0.2rem 0.8rem;
+    border-radius: 30px;
+    font-size: 0.75rem;
+    border: 1px solid rgba(58, 90, 106, 0.4);
+    height: fit-content; /* 防止高度被拉长 */
+    white-space: nowrap; /* 文字不换行 */
+}
+
+/* 让顶部的文字在手机上也能优雅换行 */
+.top-bar div {
+    flex-wrap: wrap;
+}
+
+/* ===== 短篇阅读专属排版 ===== */
+.story-container {
+    background: var(--color-card);
+    border-radius: 20px;
+    padding: 2rem 1.5rem;
+    border: 1px solid var(--color-border);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.story-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px dashed var(--color-border);
+}
+
+.story-header h2 {
+    font-size: 1.4rem;
+    color: var(--color-wood-light);
+    font-weight: 600;
+    letter-spacing: 2px;
+    margin-bottom: 0.5rem;
+}
+
+.story-header p {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    font-style: italic;
+    letter-spacing: 1px;
+}
+
+.story-body {
+    font-size: 0.95rem;
+    line-height: 2.2; /* 行距拉大，呼吸感 */
+    color: var(--color-text);
+}
+
+/* 首行缩进 2 字符 */
+.story-body p {
+    text-indent: 2em;
+    margin-bottom: 1rem;
+    text-align: justify; /* 两端对齐，边缘更整齐 */
+}
+
+/* 章节分割符 */
+.story-divider {
+    text-align: center;
+    color: var(--color-wood);
+    margin: 2.5rem 0;
+    font-size: 0.9rem;
+    opacity: 0.6;
+    letter-spacing: 1rem;
+}
+
+/* 故事里的引用 */
+.story-quote {
+    text-indent: 0; /* 引用不需要缩进 */
+    text-align: center;
+    font-style: italic;
+    color: var(--color-wood-light);
+    margin: 1.5rem 1rem;
+    padding: 1rem;
+    background: rgba(90, 110, 84, 0.08);
+    border-radius: 12px;
+    border-left: 3px solid var(--color-wood);
+    border-right: 3px solid var(--color-wood);
+    line-height: 1.8;
+    font-size: 0.9rem;
+}
+
+/* ===== 短篇章节数字标题 ===== */
+.story-chapter {
+    text-indent: 0; /* 不要缩进 */
+    text-align: center;
+    font-size: 1.2rem;
+    font-family: monospace; /* 数字用等宽字体，更有设计感 */
+    color: var(--color-wood-light);
+    letter-spacing: 4px;
+    margin: 3rem 0 1.5rem 0;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    font-weight: bold;
+}
+/* 第一个章节标题不需要顶部分割线 */
+.story-chapter:first-of-type {
+    margin-top: 1rem;
+    border-top: none;
+    padding-top: 0;
+}
