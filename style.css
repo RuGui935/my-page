@@ -629,22 +629,24 @@ body {
 
 /
 
-/* UP主标签列表 - 强制竖排 */
+/* UP主标签列表 - 强制竖排，带背景框 */
 .up-list {
     display: flex !important;
-    flex-direction: column !important; /* 强制竖向排列 */
+    flex-direction: column !important; /* 强制竖向排列（一行一个） */
     gap: 0.5rem;
     margin-top: 0.5rem;
+    width: 100%;
 }
+
 .up-list span {
     display: block !important;
     width: 100%;
-    background: rgba(255, 255, 255, 0.03);
+    background: rgba(255, 255, 255, 0.05) !important; /* 灰白半透明底 */
+    border: 1px solid rgba(255, 255, 255, 0.08) !important; /* 浅色边框，产生框框感 */
     padding: 0.5rem 0.8rem;
-    border-radius: 8px;
+    border-radius: 8px; /* 圆角 */
     font-size: 0.85rem;
     color: var(--color-text-muted);
-    border: 1px solid var(--color-border);
     box-sizing: border-box;
 }
 
@@ -702,19 +704,23 @@ body {
 }
 
 /* 嵌套的小列表 (心水剧情) */
+/* 嵌套的小列表 (淡坑/心水角色/剧情) 改成横向小标签 */
 .sub-list {
     display: flex;
-    flex-direction: column;
-    gap: 0.3rem;
-    margin-top: 0.4rem;
-    padding-left: 0.5rem;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 0.5rem;
+    padding-left: 0;
 }
+
 .sub-list span {
-    font-size: 0.8rem;
+    display: inline-block;
+    font-size: 0.75rem;
     color: var(--color-text-muted);
-    background: rgba(255, 255, 255, 0.03);
-    padding: 0.3rem 0.6rem;
-    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.05); /* 加回那层灰色的框框背景 */
+    padding: 0.2rem 0.6rem;
+    border-radius: 6px; /* 圆角 */
+    border: 1px solid rgba(255, 255, 255, 0.03);
 }
 
 /* 小说偏好的小圆角标签 */
