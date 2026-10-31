@@ -851,3 +851,257 @@ ul {
     border-top: none;
     padding-top: 0;
 }
+
+/* ===== 短篇封面页 ===== */
+.story-cover-view {
+    display: flex;
+    justify-content: flex-start; /* 靠左 */
+    align-items: flex-start;
+    padding: 1rem 1rem 1rem 0; /* 左边去掉内边距，更贴边 */
+}
+
+.story-cover-card {
+    background: var(--color-card);
+    width: 100%;
+    max-width: 320px; /* 宽度限制在 320px，变窄了 */
+    border-radius: 16px; /* 圆角稍微小一点 */
+    padding: 1.5rem 1.2rem; /* 减少上下内边距，变扁了 */
+    border: 1px solid var(--color-border);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+/* 鼠标悬浮时稍微右移并变成木色边框 */
+.story-cover-card:hover {
+    border-color: var(--color-wood);
+    transform: translateX(4px);
+}
+
+.story-cover-card h2 {
+    font-size: 1.2rem; /* 标题调小一点 */
+    color: var(--color-wood-light);
+    letter-spacing: 1px;
+    margin-bottom: 0.4rem;
+}
+
+/* 小字 */
+.story-subtitle {
+    text-align: left;
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    font-style: italic;
+}
+
+.story-cover-card h2 {
+    font-size: 1.5rem;
+    color: var(--color-wood-light);
+    letter-spacing: 2px;
+    text-align: left;
+}
+
+.story-meta {
+    display: flex;
+    justify-content: flex-start;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+}
+
+.enter-story-btn {
+    background: var(--color-wood);
+    color: #fff;
+    border: none;
+    padding: 0.8rem 2rem;
+    border-radius: 30px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: 0.3s;
+    width: 100%;
+    letter-spacing: 1px;
+}
+.enter-story-btn:hover {
+    background: var(--color-wood-light);
+    transform: translateY(-2px);
+}
+
+/* ===== 短篇封面页 ===== */
+.story-cover-view {
+    display: flex;
+    justify-content: flex-start; /* 靠左对齐 */
+    align-items: flex-start;
+    padding: 2rem 1rem;
+}
+
+.story-cover-card {
+    background: var(--color-card);
+    width: 100%;
+    max-width: 400px;
+    border-radius: 20px;
+    padding: 2rem 1.8rem;
+    border: 1px solid var(--color-border);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    cursor: pointer; /* 提示可点击 */
+    transition: 0.3s;
+}
+
+.story-cover-card:hover {
+    border-color: var(--color-wood);
+    transform: translateY(-2px);
+}
+
+.story-cover-card h2 {
+    font-size: 1.4rem;
+    color: var(--color-wood-light);
+    letter-spacing: 1px;
+    margin-bottom: 0.5rem;
+}
+
+/* 居左对齐的小字 */
+.story-subtitle {
+    text-align: left;
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    font-style: italic;
+}
+
+/* ===== 短篇阅读页 ===== */
+.story-read-view {
+    position: relative;
+    padding-top: 1rem;
+}
+/* 正文顶部的小标签 */
+.story-read-tags {
+    display: flex;
+    gap: 0.6rem;
+    margin-bottom: 2rem;
+    padding-left: 1rem;
+}
+
+.story-read-tags span {
+    background: rgba(90, 110, 84, 0.15); /* 木色半透明底 */
+    color: var(--color-wood-light);      /* 木绿色文字 */
+    border: 1px solid rgba(90, 110, 84, 0.3);
+    padding: 0.15rem 0.6rem;
+    border-radius: 20px;                 /* 圆角胶囊 */
+    font-size: 0.75rem;
+    letter-spacing: 0.5px;
+}
+
+/* 去掉原来正文里多余的大标题 */
+.story-header {
+    display: none; 
+}
+
+.story-container {
+    background: var(--color-card);
+    border-radius: 20px;
+    padding: 2rem 1.5rem;
+    border: 1px solid var(--color-border);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+/* ===== 短篇阅读行距稍微调小 ===== */
+.story-body {
+    font-size: 0.95rem;
+    line-height: 1.9; /* 从 2.2 调到 1.9 */
+    color: var(--color-text);
+}
+
+.story-body p {
+    text-indent: 2em;
+    margin-bottom: 1.2rem;
+    text-align: justify;
+}
+
+/* ===== 阅读页顶部返回 ===== */
+.story-nav-top {
+    margin-bottom: 1.5rem;
+    padding-left: 0.5rem;
+}
+.inline-back-btn {
+    background: transparent;
+    border: none;
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+    cursor: pointer;
+    padding: 0.5rem 0;
+    transition: 0.2s;
+}
+.inline-back-btn:hover {
+    color: var(--color-wood-light);
+}
+
+/* ===== 智能滚动悬浮球 ===== */
+.scroll-fab {
+    position: fixed;
+    bottom: 80px; /* 在底部导航上方 */
+    right: 20px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(30, 36, 44, 0.85);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
+    font-size: 1.2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    cursor: pointer;
+    z-index: 100;
+    transition: 0.3s;
+    opacity: 0.6; /* 平时半透明，不抢视线 */
+}
+
+.scroll-fab:hover {
+    opacity: 1;
+    background: var(--color-wood);
+    color: white;
+}
+.control-btn:hover {
+    background: var(--color-wood);
+    color: white;
+}
+
+.scroll-controls {
+    display: flex;
+    gap: 0.5rem;
+}
+
+/* 章节数字标题 */
+.story-chapter {
+    text-indent: 0;
+    text-align: center;
+    font-size: 1.1rem;
+    font-family: monospace;
+    color: var(--color-wood-light);
+    letter-spacing: 4px;
+    margin: 3rem 0 1.5rem 0;
+    border-top: 1px dashed rgba(255, 255, 255, 0.05);
+    padding-top: 1rem;
+    font-weight: bold;
+}
+.story-chapter:first-of-type {
+    margin-top: 1rem;
+    border-top: none;
+    padding-top: 0;
+}
+
+/* 故事引用 */
+.story-quote {
+    text-indent: 0;
+    text-align: center;
+    font-style: italic;
+    color: var(--color-wood-light);
+    margin: 1.5rem 1rem;
+    padding: 1rem;
+    background: rgba(90, 110, 84, 0.08);
+    border-radius: 12px;
+    border-left: 3px solid var(--color-wood);
+    border-right: 3px solid var(--color-wood);
+    line-height: 1.8;
+    font-size: 0.9rem;
+}

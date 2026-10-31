@@ -546,3 +546,83 @@ document.addEventListener('DOMContentLoaded', () => {
     // 启动加载
     loadBooks();
 });
+
+            // ===== 短篇视图切换与智能滚动控制 =====
+    const coverView = document.getElementById('story-cover-view');
+    const readView = document.getElementById('story-read-view');
+    const enterBtn = document.getElementById('enter-story-btn');
+    const backBtn = document.getElementById('back-to-cover');
+    const smartScrollBtn = document.getElementById('smart-scroll-btn');
+    
+    const subTabsContainer = document.querySelector('#tab-showcase .sub-tabs');
+    const scrollContainer = document.querySelector('.app-container');
+
+    if (enterBtn) {
+        let lastScrollTop = 0; // 记录上一次滚动的位置
+        let hideTimeout; // 用于防抖隐藏
+
+        // 进入正文
+        enterBtn.addEventListener('click', () => {
+            coverView.style.display = 'none';
+            readView.style.display = 'block';
+            subTabsContainer.style.display = 'none'; 
+            scrollContainer.scrollTo({ top: 0, behavior: 'smooth' });
+            smartScrollBtn.style.opacity = '0'; // 刚进正文时隐藏
+        });
+
+        // 返回简介
+        backBtn.addEventListener('click', () => {
+            readView.style.display = 'none';
+            coverView.style.display = 'flex';
+            subTabsContainer.style.display = 'flex'; 
+            scrollContainer.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // 点击智能按钮
+        smartScrollBtn.addEventListener('click', () => {
+            if (smartScrollBtn.textContent === '↑') {
+                scrollContainer.scrollTo({ top: 0, behavior: 'smooth' });
+            } else {
+                scrollContainer.scrollTo({ top: scrollContainer.scrollHeight, behavior: 'smooth' });
+            }
+        });
+
+        // 监听滚动，实现智能显示和箭头方向
+        scrollContainer.addEventListener('scroll', () => {
+            // 如果不在正文阅读页，就不处理
+            if (readView.style.display === 'none') return;
+
+            const currentScrollTop = scrollContainer.scrollTop;
+            const scrollHeight = scrollContainer.scrollHeight;
+            const clientHeight = scrollContainer.clientHeight;
+
+            // 如果很接近顶部（小于50px），或者很接近底部，直接显示
+            if (currentScrollTop <= 50) {
+                // 在最顶部时，不需要任何操作，隐藏按钮
+                smartScrollBtn.style.opacity = '0';
+                lastScrollTop = currentScrollTop;
+                return;
+            }
+
+            // 判断滚动方向
+            if (currentScrollTop > lastScrollTop) {
+                // 往下滑 -> 显示向下箭头 ↓
+                smartScrollBtn.textContent = '↓';
+                smartScrollBtn.style.opacity = '1';
+            } else {
+                // 往上滑 -> 显示向上箭头 ↑
+                smartScrollBtn.textContent = '↑';
+                smartScrollBtn.style.opacity = '1';
+            }
+
+            // 处理滚动停止后的自动隐藏（停留 1.5 秒后变半透明）
+            clearTimeout(hideTimeout);
+            hideTimeout = setTimeout(() => {
+                if (currentScrollTop > 50) {
+                    smartScrollBtn.style.opacity = '0.3';
+                }
+            }, 1500);
+
+            lastScrollTop = currentScrollTop;
+        });
+    }
