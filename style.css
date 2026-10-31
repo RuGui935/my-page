@@ -1105,3 +1105,18 @@ ul {
     line-height: 1.8;
     font-size: 0.9rem;
 }
+/* ===== 终极终极修复 ===== */
+/* 1. 彻底隐藏短篇页面里的全局加号容器 */
+#sub-story ~ #fab-container,
+body:has(#sub-story.active) #fab-container {
+    display: none !important;
+}
+
+/* 2. 确保短篇阅读页里的滚动球 绝对 显示 */
+#sub-story #smart-scroll-btn,
+#sub-story .scroll-fab {
+    display: flex !important;
+    opacity: 0.6 !important; /* 默认半透明，滑动时 JS 会把它变成 1 */
+    visibility: visible !important;
+    pointer-events: auto !important;
+}

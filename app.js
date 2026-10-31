@@ -102,9 +102,13 @@ document.addEventListener('DOMContentLoaded', () => {
             btn.classList.add('active');
             document.getElementById(btn.dataset.target).classList.add('active');
             currentSubTab = btn.dataset.target;
-            checkFabVisibility(); // 加上这句
+             // 如果切换到短篇，强制隐藏
+            if (currentSubTab === 'sub-story') {
+                document.getElementById('fab-container').style.display = 'none';
+            }
             
-            // 切换时重新加载数据
+            checkFabVisibility();
+            
             if(currentSubTab === 'sub-books') loadBooks();
             if(currentSubTab === 'sub-design') loadDesigns();
         });
@@ -133,16 +137,16 @@ document.addEventListener('DOMContentLoaded', () => {
         if(currentSubTab === 'sub-design') loadDesigns();
     }
 
-    // 判断是否显示加号
+            // 判断是否显示加号
     function checkFabVisibility() {
-        // 只有在登录状态下，并且当前在 "展示" 页面，且处在 "书架" 或 "设计" 子页时才显示
         const isShowcaseActive = document.getElementById('tab-showcase').classList.contains('active');
         const isBookOrDesign = (currentSubTab === 'sub-books' || currentSubTab === 'sub-design');
         
-        if (isLoggedIn && isShowcaseActive && isBookOrDesign) {
-            fabContainer.style.display = 'block';
-        } else {
+        // 如果是在短篇，直接暴力隐藏全局容器，绝不留情
+        if (currentSubTab === 'sub-story' || !isShowcaseActive || !isBookOrDesign) {
             fabContainer.style.display = 'none';
+        } else {
+            fabContainer.style.display = 'block';
         }
     }
 
