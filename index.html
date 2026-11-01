@@ -161,21 +161,24 @@
                 </ul>
             </div>
 
+                        <!-- 卡片1：综艺与电影 -->
             <div class="card">
-                <h2>📺 综艺、电影与 UP 主</h2>
+                <h2>📺 综艺与电影</h2>
                 <ul class="styled-list">
                     <li><strong>综艺：</strong>《女子推理社》1、2两季</li>
                     <li><strong>电影：</strong>《还有明天》</li>
                 </ul>
-                <div style="margin-top: 0.8rem;">
-                    <p style="font-size: 0.85rem; margin-bottom: 0.5rem;"><strong>喜欢的 UP 主：</strong></p>
-                                        <div class="up-list">
-                        <span style="margin-bottom: 0.6rem;">🐱 萌宠：@猫猫派掌门</span>
-                        <span style="margin-bottom: 0.6rem;">🎮 游戏：@秋秋秋禾火</span>
-                        <span style="margin-bottom: 0.6rem;">🍜 美食：@香蕉柿子梨</span>
-                        <span style="margin-bottom: 0.6rem;">🌿 生活：@一亩秋葵</span>
-                        <span style="margin-bottom: 0;">🧠 科普：@对话中的暂停</span>
-                    </div>
+            </div>
+
+            <!-- 卡片2：喜欢的 UP 主 -->
+            <div class="card">
+                <h2>🎬 喜欢的 UP 主</h2>
+                <div class="up-list" style="margin-top: 0.5rem;">
+                    <span>🐱 萌宠：@猫猫派掌门</span>
+                    <span>🎮 游戏：@秋秋秋禾火</span>
+                    <span>🍜 美食：@香蕉柿子梨</span>
+                    <span>🌿 生活：@一亩秋葵</span>
+                    <span>🧠 科普：@对话中的暂停</span>
                 </div>
             </div>
 
@@ -362,12 +365,31 @@
                 </div>
             </div>
 
-            <!-- 书架 -->
+                        <!-- 书架 -->
             <div id="sub-books" class="sub-tab-content">
-                <div class="card">
-                    <h2>文字书架</h2>
-                    <p>小说增删改查区。</p>
+                <!-- 筛选工具栏 -->
+                <div class="shelf-filters">
+                    <select id="filter-status" class="sort-select">
+                        <option value="全部">状态：全部</option>
+                        <option value="已看完">已看完</option>
+                        <option value="追连载">追连载</option>
+                        <option value="待看">待看</option>
+                    </select>
+                    <select id="filter-category" class="sort-select">
+                        <option value="全部">分类：全部</option>
+                        <option value="古风">古风</option>
+                        <option value="现代">现代</option>
+                        <option value="末世">末世</option>
+                        <option value="无限流">无限流</option>
+                        <option value="快穿">快穿</option>
+                        <option value="架空">架空</option>
+                        <option value="玄幻">玄幻</option>
+                        <option value="其它">其它</option>
+                    </select>
                 </div>
+                
+                <!-- 书架内容区 (JS动态渲染) -->
+                <div id="books-container"></div>
             </div>
         </section>
 
@@ -498,6 +520,50 @@
             <div class="modal-actions">
                 <button id="design-cancel">取消</button>
                 <button id="design-save">保存</button>
+            </div>
+        </div>
+    </div>
+
+        <!-- 书籍详情弹窗 -->
+    <div id="book-detail-modal" class="modal">
+        <div class="modal-content">
+            <h3 id="detail-title" style="font-size: 1.3rem; border-bottom: 1px solid var(--color-border); padding-bottom: 0.5rem; margin-bottom: 1rem; color: var(--color-text);">书名</h3>
+            
+            <div class="detail-row">
+                <span class="detail-label">作者</span>
+                <span id="detail-author" class="detail-value">作者名</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">分类</span>
+                <span id="detail-category" class="tag cat-tag">分类</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">状态</span>
+                <span id="detail-status" class="status">状态</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">评分</span>
+                <span id="detail-rating" class="rating">★★★★★</span>
+            </div>
+            <div class="detail-row" style="align-items: flex-start;">
+                <span class="detail-label">标签</span>
+                <div id="detail-tags" style="display: flex; gap: 0.4rem; flex-wrap: wrap;">标签</div>
+            </div>
+            
+                        <div class="detail-row" style="align-items: flex-start; margin-top: 1rem;">
+                <span class="detail-label" style="padding-top: 0.5rem;">备注</span>
+                <div class="detail-note-box" style="flex: 1; margin-top: 0; padding: 0.6rem 0.8rem;">
+                    <p id="detail-note" style="font-size: 0.85rem; color: var(--color-text-muted); line-height: 1.6; margin: 0;"></p>
+                </div>
+            </div>
+
+            <!-- 管理员专属操作 -->
+            <div id="detail-actions" class="modal-actions" style="justify-content: space-between; margin-top: 1.5rem;">
+                <button id="detail-close" style="background: transparent; color: var(--color-text-muted);">关闭</button>
+                <div id="admin-actions" style="display: none; gap: 0.5rem;">
+                    <button id="detail-edit" style="background: var(--color-water); color: white;">编辑</button>
+                    <button id="detail-delete" style="background: #a34a4a; color: white;">删除</button>
+                </div>
             </div>
         </div>
     </div>

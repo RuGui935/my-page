@@ -120,8 +120,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const fabContainer = document.getElementById('fab-container');
     const fabAdd = document.getElementById('fab-add');
 
-        function updateAuthUI() {
-        // 管理员按钮始终显示（在左下角）
+            function updateAuthUI() {
         adminBtn.style.display = 'block';
         if (isLoggedIn) {
             adminBtn.textContent = '退出';
@@ -130,23 +129,29 @@ document.addEventListener('DOMContentLoaded', () => {
             adminBtn.textContent = '登录';
             adminBtn.classList.remove('logged-in');
         }
-        checkFabVisibility(); // 检查加号是否显示
+        
+        checkFabVisibility(); // 重新检查加号显示状态
         
         // 刷新当前视图
         if(currentSubTab === 'sub-books') loadBooks();
         if(currentSubTab === 'sub-design') loadDesigns();
     }
 
-            // 判断是否显示加号
+               // 判断是否显示加号
     function checkFabVisibility() {
+        // 如果没有登录，无论在哪，统统隐藏！
+        if (!isLoggedIn) {
+            fabContainer.style.display = 'none';
+            return;
+        }
+
         const isShowcaseActive = document.getElementById('tab-showcase').classList.contains('active');
         const isBookOrDesign = (currentSubTab === 'sub-books' || currentSubTab === 'sub-design');
         
-        // 如果是在短篇，直接暴力隐藏全局容器，绝不留情
-        if (currentSubTab === 'sub-story' || !isShowcaseActive || !isBookOrDesign) {
-            fabContainer.style.display = 'none';
-        } else {
+        if (isShowcaseActive && isBookOrDesign) {
             fabContainer.style.display = 'block';
+        } else {
+            fabContainer.style.display = 'none';
         }
     }
 
@@ -194,70 +199,140 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     updateAuthUI();
 
-    // ===== 1. 书架模块 =====
+        // ===== 1. 书架模块 (重构版) =====
     async function loadBooks() {
-        const container = document.getElementById('sub-books');
-        let orderParam = currentSort === 'asc' ? 'id.asc' : 'created_at.desc';
-        
-        try {
-            const books = await supabaseFetch(`books?select=*&order=${orderParam}`);
-            let html = `
-                <div class="shelf-toolbar">
-                    <span>共 ${books ? books.length : 0} 本</span>
-                    <select id="sort-select" class="sort-select">
-                        <option value="asc" ${currentSort === 'asc' ? 'selected' : ''}>正序 (按序号)</option>
-                        <option value="desc" ${currentSort === 'desc' ? 'selected' : ''}>倒序 (最新在前)</option>
-                    </select>
-                </div>
-            `;
+        const container = document.getElementById('books-container');
+        const filterStatus = document.getElementById('filter-status').value;
+        const filterCategory = document.getElementById('filter-category').value;
 
+        try {
+            // 构建查询条件 (Supabase 的 REST 语法)
+            let query = 'books?select=*&order=id.asc';
+            if (filterStatus !== '全部') query += `&status=eq.${filterStatus}`;
+            if (filterCategory !== '全部') query += `&category=eq.${filterCategory}`;
+            
+            const books = await supabaseFetch(query);
+            
             if (!books || books.length === 0) {
-                container.innerHTML = html + '<div class="card"><p>书架还是空的。</p></div>';
-                bindSortEvent();
+                container.innerHTML = '<div class="card"><p>没有符合条件的书籍。</p></div>';
                 return;
             }
 
-            html += '<div class="card"><div class="book-list">';
-            books.forEach((book, index) => {
-                const serialNum = index + 1;
-                const stars = '★'.repeat(book.rating || 0) + '☆'.repeat(5 - (book.rating || 0));
-                const actionBtns = isLoggedIn ? `
-                    <div class="book-actions">
-                        <button class="btn-small" onclick="editBook(${book.id})">编辑</button>
-                        <button class="btn-small delete" onclick="openDelete('books', ${book.id})">删除</button>
-                    </div>` : '';
+            // 将书籍按四个书架分组
+            const groups = {
+                '云中书': { icon: '☁️', books: [] },
+                '朱砂册': { icon: '❤️', books: [] },
+                '清简集': { icon: '📖', books: [] },
+                '衍生卷': { icon: '🌀', books: [] }
+            };
 
-                let tagsHtml = '';
-                if (book.tags && book.tags.length > 0) {
-                    tagsHtml = book.tags.map(t => `<span class="mini-tag">${t}</span>`).join('');
-                }
+            books.forEach(book => {
+                let groupName = '清简集';
+                if (book.status === '追连载') groupName = '云中书';
+                if (book.status === '已看完' && book.rating >= 4) groupName = '朱砂册';
+                if (book.note && book.note.includes('同人')) groupName = '衍生卷'; // 如果你在同人书备注里写了“同人”，归入衍生卷
+                
+                groups[groupName].books.push(book);
+            });
+
+            let html = '';
+            // 遍历渲染四个书架
+            for (const [groupName, groupData] of Object.entries(groups)) {
+                if (groupData.books.length === 0) continue; // 如果没书就不显示这个书架
 
                 html += `
-                    <div class="book-item">
-                        <div class="book-item-header">
-                            <div class="book-title-line">
-                                <span class="book-index">${serialNum}.</span>
-                                <span class="book-title">《${book.title}》</span>
-                                ${book.author ? `<span class="book-author">${book.author}</span>` : ''}
+                    <div class="shelf-group" data-group="${groupName}">
+                        <div class="shelf-group-title">${groupData.icon} ${groupName} <span style="font-size:0.7rem; font-weight:normal; color:var(--color-text-muted); margin-left: auto;">${groupData.books.length} 本</span></div>
+                        <div class="book-grid">
+                `;
+
+                groupData.books.forEach(book => {
+                    const stars = '★'.repeat(book.rating || 0) + '☆'.repeat(5 - (book.rating || 0));
+                    html += `
+                        <div class="book-card" onclick="showBookDetail(${book.id})">
+                            <div class="book-card-left">
+                                <div class="book-card-title">《${book.title}》</div>
+                                <div class="book-card-author">${book.author || '未知作者'}</div>
                             </div>
-                            ${actionBtns}
+                            <div class="book-card-right">
+                                <div class="book-card-rating">${stars}</div>
+                                <div class="tag cat-tag" style="font-size:0.6rem;">${book.category}</div>
+                            </div>
                         </div>
-                        <div class="book-meta">
-                            <span class="tag cat-tag">${book.category || '未分类'}</span>
-                            ${tagsHtml}
-                            <span class="status">${book.status || '待看'}</span>
-                            <span class="rating">${stars}</span>
-                        </div>
-                    </div>`;
-            });
-            html += '</div></div>';
+                    `;
+                });
+                html += `</div></div>`;
+            }
             container.innerHTML = html;
-            bindSortEvent();
+
         } catch (e) {
             container.innerHTML = `<div class="card"><p style="color:red;">加载失败: ${e.message}</p></div>`;
         }
     }
 
+    // 绑定筛选事件
+    document.getElementById('filter-status').addEventListener('change', loadBooks);
+    document.getElementById('filter-category').addEventListener('change', loadBooks);
+
+    // ===== 书籍详情弹窗逻辑 =====
+    const detailModal = document.getElementById('book-detail-modal');
+    let currentBookId = null;
+
+    window.showBookDetail = async (id) => {
+        try {
+            const bookData = await supabaseFetch(`books?id=eq.${id}&select=*`);
+            if (bookData.length === 0) return;
+            const book = bookData[0];
+            currentBookId = book.id;
+
+            // 填充数据
+            document.getElementById('detail-title').textContent = `《${book.title}》`;
+            document.getElementById('detail-author').textContent = book.author || '未知';
+            document.getElementById('detail-category').textContent = book.category || '未分类';
+            document.getElementById('detail-status').textContent = book.status || '待看';
+            
+            const stars = '★'.repeat(book.rating || 0) + '☆'.repeat(5 - (book.rating || 0));
+            document.getElementById('detail-rating').textContent = stars;
+            
+            // 处理标签
+            const tagsBox = document.getElementById('detail-tags');
+            if (book.tags && book.tags.length > 0) {
+                tagsBox.innerHTML = book.tags.map(t => `<span class="mini-tag" style="font-size:0.75rem; padding:0.1rem 0.5rem;">${t}</span>`).join('');
+            } else {
+                tagsBox.innerHTML = '<span style="color:var(--color-text-muted); font-size:0.8rem;">无标签</span>';
+            }
+
+            // 处理备注
+            document.getElementById('detail-note').textContent = book.note || '暂无备注...';
+
+            // 判断是否显示管理员操作按钮
+            const adminActions = document.getElementById('admin-actions');
+            if (isLoggedIn) {
+                adminActions.style.display = 'flex';
+            } else {
+                adminActions.style.display = 'none';
+            }
+
+            detailModal.classList.add('active');
+        } catch (e) {
+            alert('获取详情失败: ' + e.message);
+        }
+    };
+
+    document.getElementById('detail-close').addEventListener('click', () => {
+        detailModal.classList.remove('active');
+    });
+
+    // 详情弹窗里的 编辑/删除 按钮
+    document.getElementById('detail-edit').addEventListener('click', () => {
+        detailModal.classList.remove('active');
+        editBook(currentBookId);
+    });
+
+    document.getElementById('detail-delete').addEventListener('click', () => {
+        detailModal.classList.remove('active');
+        openDelete('books', currentBookId);
+    });
     function bindSortEvent() {
         const sortSelect = document.getElementById('sort-select');
         if (sortSelect) {

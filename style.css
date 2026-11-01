@@ -1122,3 +1122,120 @@ body:has(#sub-story.active) #fab-container {
     visibility: visible !important;
     pointer-events: auto !important;
 }
+/* ===== 筛选工具栏 ===== */
+.shelf-filters {
+    display: flex;
+    gap: 0.6rem;
+    margin-bottom: 1.5rem;
+}
+.shelf-filters select {
+    flex: 1; /* 平分宽度 */
+    background: var(--color-card);
+    border: 1px solid var(--color-border);
+    padding: 0.5rem;
+    font-size: 0.85rem;
+}
+
+/* ===== 四大书架板块 ===== */
+.shelf-group {
+    margin-bottom: 2rem;
+}
+.shelf-group-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.05rem;
+    font-weight: 500;
+    color: var(--color-text);
+    margin-bottom: 1rem;
+    padding-left: 0.8rem;
+    position: relative;
+}
+/* 左侧的装饰线 */
+.shelf-group-title::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 15%;
+    height: 70%;
+    width: 3px;
+    background: var(--color-wood-light);
+    border-radius: 3px;
+}
+/* 不同书架的不同颜色修饰（你可以根据喜好调） */
+.shelf-group[data-group="云中书"] .shelf-group-title::before { background: var(--color-water); }
+.shelf-group[data-group="朱砂册"] .shelf-group-title::before { background: #b35c5c; } /* 朱砂红 */
+.shelf-group[data-group="清简集"] .shelf-group-title::before { background: var(--color-wood); }
+.shelf-group[data-group="衍生卷"] .shelf-group-title::before { background: #8a7e6e; }
+
+/* ===== 书架卡片列表 ===== */
+.book-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+.book-card {
+    background: var(--color-card);
+    border-radius: 12px;
+    padding: 1rem;
+    border: 1px solid var(--color-border);
+    cursor: pointer;
+    transition: 0.2s;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.book-card:hover {
+    border-color: var(--color-wood-light);
+    transform: translateX(4px);
+    background: rgba(30, 36, 44, 0.9);
+}
+.book-card-left {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+.book-card-title {
+    font-size: 1rem;
+    color: var(--color-text);
+}
+.book-card-author {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+}
+.book-card-right {
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.3rem;
+}
+.book-card-rating {
+    color: #d4af37;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+}
+
+/* ===== 详情弹窗样式 ===== */
+.detail-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.8rem;
+    font-size: 0.9rem;
+}
+.detail-label {
+    width: 60px;
+    color: var(--color-text-muted);
+    font-size: 0.85rem;
+    flex-shrink: 0;
+}
+.detail-value {
+    color: var(--color-text);
+}
+.detail-note-box {
+    background: rgba(0,0,0,0.2);
+    padding: 0.8rem;
+    border-radius: 8px;
+    margin-top: 1rem;
+    border: 1px dashed var(--color-border);
+}
