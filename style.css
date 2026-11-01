@@ -1326,3 +1326,111 @@ body:has(#sub-story.active) #fab-container {
     font-size: 0.8rem;
     letter-spacing: 1px;
 }
+/* ===== 书架卡片极致紧凑排版 ===== */
+.book-item-clickable {
+    padding: 0.8rem 0.6rem;
+    border-bottom: 1px solid var(--color-border);
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.book-item-clickable:hover {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+/* 上下两行布局 */
+.book-main-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* 垂直居中对齐 */
+    gap: 0.8rem;
+    height: 100%; /* 限制高度 */
+}
+
+/* ===== 左侧：书名 + 作者 ===== */
+.book-info-left {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    flex: 1; /* 占据剩余空间 */
+    min-width: 0; /* 极其重要：防止内容把 flex 撑爆 */
+}
+.book-info-left .book-title {
+    font-size: 0.9rem; /* 字体改小 */
+    color: var(--color-text);
+    font-weight: 500;
+    /* 限制单行省略号 */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+    width: 100%;
+}
+.book-info-left .book-author {
+    font-size: 0.7rem;
+    color: var(--color-text-muted);
+    /* 作者也截断 */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ===== 右侧：标签 + 星级/操作 ===== */
+.book-info-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 0.4rem;
+    max-width: 60%; /* 限制右侧最大宽度 */
+    flex-shrink: 0; /* 防止被挤压 */
+}
+
+/* 标签行：超过的标签直接隐藏（或者折行但只显示一行高度） */
+.book-tags-top {
+    display: flex;
+    gap: 0.3rem;
+    align-items: center;
+    justify-content: flex-end;
+    /* 强制不换行，并隐藏超出部分 */
+    white-space: nowrap;
+    overflow: hidden;
+    max-width: 100%;
+}
+.book-tags-top .tag, 
+.book-tags-top .mini-tag {
+    flex-shrink: 0; /* 防止标签被压扁 */
+}
+
+.book-rating-bottom {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+/* 标签和星星字体进一步缩小 */
+.cat-tag {
+    background: rgba(58, 90, 106, 0.3);
+    color: #a0c0d0;
+    padding: 0.05rem 0.3rem;
+    border-radius: 4px;
+    border: 1px solid rgba(58, 90, 106, 0.5);
+    font-size: 0.6rem;
+}
+.mini-tag {
+    color: var(--color-text-muted);
+    background: rgba(255, 255, 255, 0.05);
+    padding: 0.05rem 0.3rem;
+    border-radius: 4px;
+    font-size: 0.6rem;
+}
+.book-rating-bottom .rating {
+    color: #d4af37;
+    font-size: 0.7rem;
+    letter-spacing: 0.5px;
+}
+
+/* 小按钮更紧凑 */
+.btn-small {
+    padding: 0.1rem 0.3rem;
+    font-size: 0.6rem;
+}
