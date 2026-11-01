@@ -267,10 +267,9 @@ document.addEventListener('DOMContentLoaded', () => {
                             <button class="btn-small delete" onclick="openDelete('books', ${book.id})">删除</button>
                         </div>` : '';
 
-                                        let tagsHtml = '';
+                    let tagsHtml = '';
                     if (book.tags && book.tags.length > 0) {
-                        // 最多只取前 2 个标签，防止撑爆排版
-                        tagsHtml = book.tags.slice(0, 2).map(t => `<span class="mini-tag">${t}</span>`).join('');
+                        tagsHtml = book.tags.map(t => `<span class="mini-tag">${t}</span>`).join('');
                     }
 
                     html += `
