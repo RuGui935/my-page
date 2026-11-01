@@ -180,7 +180,7 @@
                     <span style="margin-bottom: 0.6rem;">🍜 美食：@香蕉柿子梨</span>
                     <span style="margin-bottom: 0.6rem;">🌿 生活：@一亩秋葵</span>
                     <span style="margin-bottom: 0.6rem;">🧠 科普：@对话中的暂停</span>
-                    <span style="margin-bottom: 0.6rem;">📺 综艺：@社死吧STAFF</span>
+                    <span style="margin-bottom: 0.6rem;">🎬 综艺：@社死吧STAFF</span>
                     <span style="margin-bottom: 0.6rem;">......</span>
                 </div>
             </div>
@@ -368,31 +368,34 @@
                 </div>
             </div>
 
-                        <!-- 书架 -->
+                                    <!-- 书架 -->
             <div id="sub-books" class="sub-tab-content">
-                <!-- 筛选工具栏 -->
-                <div class="shelf-filters">
-                    <select id="filter-status" class="sort-select">
-                        <option value="全部">状态：全部</option>
-                        <option value="已看完">已看完</option>
-                        <option value="追连载">追连载</option>
-                        <option value="待看">待看</option>
+                <!-- 顶部的筛选栏 -->
+                <div class="shelf-toolbar" style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem;">
+                    <select id="filter-folder" class="sort-select" style="flex: 1;">
+                        <option value="all">收藏夹：全部</option>
+                        <option value="云中书">收藏夹：云中书</option>
+                        <option value="朱砂册">收藏夹：朱砂册</option>
+                        <option value="清简集">收藏夹：清简集</option>
                     </select>
-                    <select id="filter-category" class="sort-select">
-                        <option value="全部">分类：全部</option>
-                        <option value="古风">古风</option>
-                        <option value="现代">现代</option>
-                        <option value="末世">末世</option>
-                        <option value="无限流">无限流</option>
-                        <option value="快穿">快穿</option>
-                        <option value="架空">架空</option>
-                        <option value="玄幻">玄幻</option>
-                        <option value="其它">其它</option>
+                    
+                    <select id="filter-category" class="sort-select" style="flex: 1;">
+                        <option value="all">分类：全部</option>
+                        <option value="古风">分类：古风</option>
+                        <option value="现代">分类：现代</option>
+                        <option value="末世">分类：末世</option>
+                        <option value="无限流">分类：无限流</option>
+                        <option value="快穿">分类：快穿</option>
+                        <option value="架空">分类：架空</option>
+                        <option value="玄幻">分类：玄幻</option>
+                        <option value="其它">分类：其它</option>
                     </select>
                 </div>
                 
-                <!-- 书架内容区 (JS动态渲染) -->
-                <div id="books-container"></div>
+                <!-- 书籍列表容器（JS会动态把云中书、朱砂册塞进来） -->
+                <div id="book-list-container">
+                    <!-- JS 动态渲染 -->
+                </div>
             </div>
         </section>
 

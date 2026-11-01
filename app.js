@@ -199,80 +199,131 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     updateAuthUI();
 
-        // ===== 1. 书架模块 (重构版) =====
-    async function loadBooks() {
-        const container = document.getElementById('books-container');
-        const filterStatus = document.getElementById('filter-status').value;
-        const filterCategory = document.getElementById('filter-category').value;
+            // 全局变量记录当前筛选
+    let filterFolder = 'all';
+    let filterCategory = 'all';
 
+    // 渲染书架
+    async function loadBooks() {
+        const container = document.getElementById('book-list-container');
+        
         try {
-            // 构建查询条件 (Supabase 的 REST 语法)
-            let query = 'books?select=*&order=id.asc';
-            if (filterStatus !== '全部') query += `&status=eq.${filterStatus}`;
-            if (filterCategory !== '全部') query += `&category=eq.${filterCategory}`;
-            
-            const books = await supabaseFetch(query);
+            const books = await supabaseFetch(`books?select=*&order=id.asc`);
             
             if (!books || books.length === 0) {
-                container.innerHTML = '<div class="card"><p>没有符合条件的书籍。</p></div>';
+                container.innerHTML = '<div class="card"><p>书架还是空的。</p></div>';
                 return;
             }
 
-            // 将书籍按四个书架分组
-            const groups = {
-                '云中书': { icon: '☁️', books: [] },
-                '朱砂册': { icon: '❤️', books: [] },
-                '清简集': { icon: '📖', books: [] },
-                '衍生卷': { icon: '🌀', books: [] }
-            };
-
-            books.forEach(book => {
-                let groupName = '清简集';
-                if (book.status === '追连载') groupName = '云中书';
-                if (book.status === '已看完' && book.rating >= 4) groupName = '朱砂册';
-                if (book.note && book.note.includes('同人')) groupName = '衍生卷'; // 如果你在同人书备注里写了“同人”，归入衍生卷
-                
-                groups[groupName].books.push(book);
+            // 1. 自动归类
+            const processedBooks = books.map(book => {
+                let folder = '云中书';
+                if (book.status === '已看完') {
+                    folder = book.rating === 5 ? '朱砂册' : '清简集';
+                }
+                return { ...book, folder };
             });
 
+            // 2. 筛选
+            const filteredBooks = processedBooks.filter(book => {
+                const matchFolder = filterFolder === 'all' || book.folder === filterFolder;
+                const matchCategory = filterCategory === 'all' || book.category === filterCategory;
+                return matchFolder && matchCategory;
+            });
+
+            if (filteredBooks.length === 0) {
+                container.innerHTML = '<div class="card"><p style="text-align: center; color: var(--color-text-muted); padding: 1rem;">没有符合条件的书籍。</p></div>';
+                return;
+            }
+
+            // 3. 按“收藏夹”分组渲染
             let html = '';
-            // 遍历渲染四个书架
-            for (const [groupName, groupData] of Object.entries(groups)) {
-                if (groupData.books.length === 0) continue; // 如果没书就不显示这个书架
+            const folders = ['云中书', '朱砂册', '清简集'];
+            
+            folders.forEach(folderName => {
+                const folderBooks = filteredBooks.filter(b => b.folder === folderName);
+                if (folderBooks.length === 0) return; // 如果这个夹子是空的，就不显示标题
+
+                // 判断颜色和图标
+                let icon = '☁️';
+                let colorClass = 'folder-yun';
+                if (folderName === '朱砂册') { icon = '❤️'; colorClass = 'folder-zhu'; }
+                if (folderName === '清简集') { icon = '📖'; colorClass = 'folder-qing'; }
 
                 html += `
-                    <div class="shelf-group" data-group="${groupName}">
-                        <div class="shelf-group-title">${groupData.icon} ${groupName} <span style="font-size:0.7rem; font-weight:normal; color:var(--color-text-muted); margin-left: auto;">${groupData.books.length} 本</span></div>
-                        <div class="book-grid">
+                    <div class="folder-section">
+                        <div class="folder-header ${colorClass}">
+                            <span>${icon} ${folderName}</span>
+                            <span class="folder-count">${folderBooks.length} 本</span>
+                        </div>
+                        <div class="card" style="padding: 0.5rem 1rem;">
+                            <div class="book-list">
                 `;
 
-                groupData.books.forEach(book => {
+                                // 渲染这个夹子里的书
+                folderBooks.forEach((book, index) => {
                     const stars = '★'.repeat(book.rating || 0) + '☆'.repeat(5 - (book.rating || 0));
+                    
+                    // 操作按钮
+                    const actionBtns = isLoggedIn ? `
+                        <div class="book-actions" onclick="event.stopPropagation();">
+                            <button class="btn-small" onclick="editBook(${book.id})">编辑</button>
+                            <button class="btn-small delete" onclick="openDelete('books', ${book.id})">删除</button>
+                        </div>` : '';
+
+                    let tagsHtml = '';
+                    if (book.tags && book.tags.length > 0) {
+                        tagsHtml = book.tags.map(t => `<span class="mini-tag">${t}</span>`).join('');
+                    }
+
                     html += `
-                        <div class="book-card" onclick="showBookDetail(${book.id})">
-                            <div class="book-card-left">
-                                <div class="book-card-title">《${book.title}》</div>
-                                <div class="book-card-author">${book.author || '未知作者'}</div>
+                        <div class="book-item book-item-clickable" onclick="showBookDetail(${book.id})">
+                            <div class="book-main-row">
+                                <!-- 左侧：书名 + 作者竖排 -->
+                                <div class="book-info-left">
+                                    <span class="book-title">《${book.title}》</span>
+                                    ${book.author ? `<span class="book-author">${book.author}</span>` : ''}
+                                </div>
+                                
+                                <!-- 右侧：分类标签 + 星级评分 -->
+                                <div class="book-info-right">
+                                    <div class="book-tags-top">
+                                        <span class="tag cat-tag">${book.category || '未分类'}</span>
+                                        ${tagsHtml}
+                                    </div>
+                                    <div class="book-rating-bottom">
+                                        <span class="rating">${stars}</span>
+                                        ${actionBtns} <!-- 管理员按钮放这里比较隐蔽 -->
+                                    </div>
+                                </div>
                             </div>
-                            <div class="book-card-right">
-                                <div class="book-card-rating">${stars}</div>
-                                <div class="tag cat-tag" style="font-size:0.6rem;">${book.category}</div>
+                        </div>`;
+                });
+
+                html += `
                             </div>
                         </div>
-                    `;
-                });
-                html += `</div></div>`;
-            }
-            container.innerHTML = html;
+                    </div>
+                `;
+            });
 
+            container.innerHTML = html;
+            
         } catch (e) {
             container.innerHTML = `<div class="card"><p style="color:red;">加载失败: ${e.message}</p></div>`;
         }
     }
 
     // 绑定筛选事件
-    document.getElementById('filter-status').addEventListener('change', loadBooks);
-    document.getElementById('filter-category').addEventListener('change', loadBooks);
+    document.getElementById('filter-folder').addEventListener('change', (e) => {
+        filterFolder = e.target.value;
+        loadBooks();
+    });
+    
+    document.getElementById('filter-category').addEventListener('change', (e) => {
+        filterCategory = e.target.value;
+        loadBooks();
+    });
 
     // ===== 书籍详情弹窗逻辑 =====
     const detailModal = document.getElementById('book-detail-modal');
@@ -333,6 +384,7 @@ document.addEventListener('DOMContentLoaded', () => {
         detailModal.classList.remove('active');
         openDelete('books', currentBookId);
     });
+
     function bindSortEvent() {
         const sortSelect = document.getElementById('sort-select');
         if (sortSelect) {
