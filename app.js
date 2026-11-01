@@ -6,6 +6,9 @@ let isLoggedIn = false;
 let currentSort = 'asc';
 let currentSubTab = 'sub-books'; // 记录当前在哪个子tab
 let currentDesignType = '封面';
+          // 全局变量记录当前筛选
+    let filterFolder = 'all';
+    let filterCategory = 'all';
 
 async function supabaseFetch(endpoint, options = {}) {
     const url = `${SUPABASE_URL}/rest/v1/${endpoint}`;
@@ -117,8 +120,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ===== 登录逻辑 =====
     const adminBtn = document.getElementById('admin-btn');
     const loginModal = document.getElementById('login-modal');
-    const fabContainer = document.getElementById('fab-container');
-    const fabAdd = document.getElementById('fab-add');
+
 
             function updateAuthUI() {
         adminBtn.style.display = 'block';
@@ -137,21 +139,17 @@ document.addEventListener('DOMContentLoaded', () => {
         if(currentSubTab === 'sub-design') loadDesigns();
     }
 
-               // 判断是否显示加号
+    // 替换 checkFabVisibility 函数
     function checkFabVisibility() {
-        // 如果没有登录，无论在哪，统统隐藏！
-        if (!isLoggedIn) {
-            fabContainer.style.display = 'none';
-            return;
-        }
-
-        const isShowcaseActive = document.getElementById('tab-showcase').classList.contains('active');
-        const isBookOrDesign = (currentSubTab === 'sub-books' || currentSubTab === 'sub-design');
+        const addBookBtn = document.getElementById('add-book-btn');
+        const addDesignBtn = document.getElementById('add-design-btn');
         
-        if (isShowcaseActive && isBookOrDesign) {
-            fabContainer.style.display = 'block';
+        if (isLoggedIn) {
+            addBookBtn.style.display = 'block';
+            addDesignBtn.style.display = 'block';
         } else {
-            fabContainer.style.display = 'none';
+            addBookBtn.style.display = 'none';
+            addDesignBtn.style.display = 'none';
         }
     }
 
@@ -199,9 +197,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     updateAuthUI();
 
-            // 全局变量记录当前筛选
-    let filterFolder = 'all';
-    let filterCategory = 'all';
+  
 
     // 渲染书架
     async function loadBooks() {
@@ -323,6 +319,16 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('filter-category').addEventListener('change', (e) => {
         filterCategory = e.target.value;
         loadBooks();
+    });
+
+        // 绑定书架添加按钮
+    document.getElementById('add-book-btn').addEventListener('click', () => {
+        openBookModal();
+    });
+
+    // 绑定设计添加按钮
+    document.getElementById('add-design-btn').addEventListener('click', () => {
+        openDesignModal();
     });
 
     // ===== 书籍详情弹窗逻辑 =====
@@ -449,14 +455,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // ===== 悬浮按钮点击路由 =====
-    fabAdd.addEventListener('click', () => {
-        if (currentSubTab === 'sub-books') {
-            openBookModal();
-        } else if (currentSubTab === 'sub-design') {
-            openDesignModal();
-        }
-    });
+
 
     // ===== 书架表单逻辑 =====
     const bookModal = document.getElementById('book-modal');

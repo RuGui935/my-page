@@ -334,35 +334,13 @@ body {
     color: #fff;
 }
 
-/* ===== 悬浮添加按钮 ===== */
-#fab-container {
-    position: fixed;
-    /* 比底部导航栏高一点，且偏左一点，避免滑屏/点击冲突 */
-    bottom: 80px; 
-    right: 24px;
-    z-index: 100;
-    display: none; /* 默认隐藏，JS控制 */
+/* 美化这两个小加号按钮 */
+#add-book-btn:hover, #add-design-btn:hover {
+    background: var(--color-wood-light) !important;
+    transform: scale(1.05);
 }
-.fab-btn {
-    width: 48px; /* 稍微缩小一点 */
-    height: 48px;
-    border-radius: 50%;
-    background: rgba(90, 110, 84, 0.85); /* 带透明度的木绿色 */
-    backdrop-filter: blur(4px);
-    color: white;
-    font-size: 24px;
-    border: 1px solid rgba(255,255,255,0.1);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-    cursor: pointer;
-    transition: 0.2s;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-.fab-btn:hover, .fab-btn:active {
-    background: var(--color-wood-light);
-    transform: scale(1.1);
-}
+
+
 
 /* 调整管理员按钮，放在左侧，刚好跟加号对称，不冲突 */
 .admin-btn {
@@ -860,9 +838,10 @@ ul {
 .story-cover-card {
     background: var(--color-card);
     width: 100%;
-    max-width: 320px; /* 宽度限制在 320px，变窄了 */
-    border-radius: 16px; /* 圆角稍微小一点 */
-    padding: 1.5rem 1.2rem; /* 减少上下内边距，变扁了 */
+    /* max-width: 320px;  <-- 把这个删掉 */
+    max-width: 100%; /* 加上这句，让它铺满 */
+    border-radius: 16px; 
+    padding: 1.5rem 1.2rem; 
     border: 1px solid var(--color-border);
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
     cursor: pointer;
